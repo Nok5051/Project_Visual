@@ -8,7 +8,7 @@ Data Science & Engineering 16th**<br>
 
 ------
 
-
+<br>
 
 ### 1인 가구 식사 해결하기
 
@@ -18,11 +18,11 @@ Data Science & Engineering 16th**<br>
 >- 원가 음식에 맞춘 레시피 정보 제공
 >- 가격 맞춤 주변 음식점 서비스 제공
 
-
+<br>
 
 #### 1. 활용 데이터
 
-**API**
+​	**API**
 
 - [서울시 생필품 농수축산물 가격 정보](https://data.seoul.go.kr/dataList/OA-1170/A/1/datasetView.do)
 
@@ -30,16 +30,16 @@ Data Science & Engineering 16th**<br>
 
 
 
-**Crawling**
+​	**Crawling**
 
 - [만개의 레시피](https://www.10000recipe.com/)
 
-
+<br>
 
 #### 2. 활용 tool
 
 
 
-
+<br>
 
 #### 3. 활용 module
