@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from time import sleep
 from pandas import DataFrame
-import random
 
 service = Service('./chromedriver.exe')
 driver = webdriver.Chrome(service=service)
