@@ -123,9 +123,8 @@ df_ingd = DataFrame(data)
 
 
 # json 변환
-num = random.randint(1,100)
-with open(f'./recipe_table_{num}.json', 'w', encoding='utf-8') as file:
+with open('./recipe_table.json', 'w', encoding='utf-8') as file:
     df_recipe.to_json(file, force_ascii=False)
 
-with open(f'./recipe_ingredient_table_{num}.json', 'w', encoding='utf-8') as file:
+with open('./recipe_ingredient_table.json', 'w', encoding='utf-8') as file:
     df_ingd.to_json(file, force_ascii=False)
