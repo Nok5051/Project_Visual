@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 def ingredient_price_api():
     # 서울시 생필품 농수축산물 가격 정보
+    # 토요일 오전에 업데이트 됨
     service_key = '446644484867773537346d57656372'
     # url = f'http://openAPI.seoul.go.kr:8088/{service_key}/xml/ListNecessariesPricesService/1/5/'
     # print(url)
@@ -64,7 +65,7 @@ def ingredient_price_crawling():
     rows = []
     # 전통시장 품목 가격 가져오기
     for i in range(1, 8):
-        target_url = f"https://www.kpi.or.kr/www/life/info_detail.asp?CateCode=L00100{i}&DateCode=2022064"
+        target_url = f"https://www.kpi.or.kr/www/life/info_detail.asp?CateCode=L00100{i}&DateCode=2022061"
         resp = urllib.request.urlopen(target_url)
         soup = BeautifulSoup(resp, 'html.parser')
 
@@ -85,7 +86,7 @@ def ingredient_price_crawling():
             rows.append(dict)
     # 대형마트 품목 가격 가져오기
     for i in range(1, 4):
-        target_url = f"https://www.kpi.or.kr/www/life/info_detail.asp?CateCode=L00200{i}&DateCode=2022064"
+        target_url = f"https://www.kpi.or.kr/www/life/info_detail.asp?CateCode=L00200{i}&DateCode=2022061"
         resp = urllib.request.urlopen(target_url)
         soup = BeautifulSoup(resp, 'html.parser')
 
@@ -105,7 +106,7 @@ def ingredient_price_crawling():
                 dict[columns[i]] = data_tags[i].text
             rows.append(dict)
     # 즉석밥 가격 붙이기
-    target_url = f"https://www.kpi.or.kr/www/life/info_detail.asp?CateCode=L002010&DateCode=2022064"
+    target_url = f"https://www.kpi.or.kr/www/life/info_detail.asp?CateCode=L002010&DateCode=2022061"
     resp = urllib.request.urlopen(target_url)
     soup = BeautifulSoup(resp, 'html.parser')
 
@@ -148,11 +149,16 @@ def ingredient_price_crawling():
     '''
 
     ingredient_price_df = pd.DataFrame(rows)
-    print(ingredient_price_df)
-    #return ingredient_price_df
+    ingredient_price_df.drop(['메이커', '스펙'], axis=1)
+
+    return ingredient_price_df
 
 if __name__ == '__main__':
-    # df = ingredient_price_api()
-    # print(df)
-    ingredient_price_crawling()
+    df_api = ingredient_price_api()
+    # print(df_api.head(10))
+    df_crawling = ingredient_price_crawling()
+    print(df_crawling)
+
+    # df_api.to_csv('ingredient_price_1.csv', index=False, encoding='utf-8-sig')
+    # df_crawling.to_csv('ingredient_price_2.csv', index=False, encoding='utf-8-sig')
 
