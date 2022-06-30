@@ -2,13 +2,12 @@ import bs4
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
 from pandas import DataFrame
 
-service = Service('C:\workspaces\Project_Visual\drivers\chromedriver.exe')
-driver = webdriver.Chrome(service=service)
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 categories = [53, 54, 55, 56, 61, 65]
 menu_ul = list()
