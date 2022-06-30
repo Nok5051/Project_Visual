@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from time import sleep
 from pandas import DataFrame
 
-service = Service('./chromedriver.exe')
+service = Service('C:\workspaces\Project_Visual\drivers\chromedriver.exe')
 driver = webdriver.Chrome(service=service)
 
 categories = [53, 54, 55, 56, 61, 65]
