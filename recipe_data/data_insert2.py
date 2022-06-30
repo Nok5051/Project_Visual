@@ -1,7 +1,7 @@
 import csv
 import pymysql
 
-db = pymysql.connect(host='localhost', port=3306, user='mealproject', password='meal1234', db='MEAL', charset='utf8')
+db = pymysql.connect(host='50.18.18.112', port=3306, user='mealproject', password='meal1234', db='meal', charset='utf8')
 cursor = db.cursor(pymysql.cursors.DictCursor)
 
 # 테이블 생성
