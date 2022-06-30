@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mealproject',
+    'recipe',
+    'restaurant',
 ]
 
 MIDDLEWARE = [
@@ -77,10 +79,10 @@ WSGI_APPLICATION = 'mealproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'MEAL',
+        'NAME': 'meal',
         'USER': 'mealproject',
         'PASSWORD': 'meal1234',
-        'HOST': 'localhost',
+        'HOST': '50.18.18.112',
         'PORT': '3306'
     }
 }
