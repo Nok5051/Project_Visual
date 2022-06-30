@@ -2,13 +2,12 @@ import bs4
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
 from pandas import DataFrame
 
-service = Service('./chromedriver.exe')
-driver = webdriver.Chrome(service=service)
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 categories = [53, 54, 55, 56, 61, 65]
 menu_ul = list()
@@ -111,19 +110,9 @@ for menu in menu_list:
 
 # 레시피 데이터프레임 - 메뉴명, 인분, 레시피
 # data = {'RECIPE_NM': test_menu, 'QNT': servings, 'RECIPE': recipes}
-data = {'RECIPE_NM': menu_list, 'QNT': servings, 'RECIPE': recipes}
+data = {'RECIPE_NM': menu_list, 'QNT': servings, 'RECIPE': recipes, 'INGREDIENTS': ingredients, 'UNITS': units}
 df_recipe = DataFrame(data)
 
-
-# 재료 데이터프레임 - 메뉴명, 재료, 용량
-# data = {'RECIPE_NM': test_menu, 'INGREDIENTS': ingredients, 'UNITS': units}
-data = {'RECIPE_NM': menu_list, 'INGREDIENTS': ingredients, 'UNITS': units}
-df_ingd = DataFrame(data)
-
-
 # json 변환
-with open('./recipe_table.json', 'w', encoding='utf-8') as file:
+with open('./recipe_data/recipe_table.json', 'w', encoding='utf-8') as file:
     df_recipe.to_json(file, force_ascii=False)
-
-with open('./recipe_ingredient_table.json', 'w', encoding='utf-8') as file:
-    df_ingd.to_json(file, force_ascii=False)
