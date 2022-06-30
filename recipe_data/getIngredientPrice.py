@@ -3,11 +3,14 @@ from xml.etree import ElementTree
 import pandas as pd
 import urllib.request
 from bs4 import BeautifulSoup
+import config
+import datetime
+from datetime import timedelta
 
 def ingredient_price_api():
     # 서울시 생필품 농수축산물 가격 정보
     # 토요일 오전에 업데이트 됨
-    service_key = '446644484867773537346d57656372'
+    service_key = config.seoul_api_key
     # url = f'http://openAPI.seoul.go.kr:8088/{service_key}/xml/ListNecessariesPricesService/1/5/'
     # print(url)
     # resp = requests.get(url)
@@ -126,39 +129,29 @@ def ingredient_price_crawling():
             dict[columns[i]] = data_tags[i].text
         rows.append(dict)
 
-    # 특정 페이지에서 테이블 가져오기
-    '''
-    data_title = soup.find('tr', 'font_b_gray02')
-    # print(data_title)
-    title_tags = data_title.select('td')
-    columns = []
-    for td in title_tags:
-        title = td.text
-        columns.append(title)
-    # print(columns)
-    data_tr = soup.select('.life-td-pa')
-
-    rows = []
-    for tr in data_tr:
-        data_tags = tr.select('td')
-        dict = {}
-        for i in range(0, len(columns)):
-            dict[columns[i]] = data_tags[i].text
-
-        rows.append(dict)
-    '''
 
     ingredient_price_df = pd.DataFrame(rows)
-    ingredient_price_df.drop(['메이커', '스펙'], axis=1)
+
 
     return ingredient_price_df
 
+
+def get_kamis_data():
+    service_key = config.kamis_api_key
+    service_id = '2579'
+    yesterday = datetime.date.today() - timedelta(1)
+    day = yesterday.strftime('%Y-%m-%d')
+
+    # itemcategorycode ={ 100:식량작물, 200:채소류, 300:특용작물, 400:과일류, 500:축산물, 600:수산물}
+    url = f'http://www.kamis.or.kr/service/price/xml.do?action=ItemInfo&p_productclscode=01&p_countycode=1101&p_regday={day}&p_itemcategorycode=100&p_itemcode=111&p_kindcode=01&p_cert_key={service_key}&p_cert_id={service_id}&p_returntype=xml'
+    print(url)
 if __name__ == '__main__':
-    df_api = ingredient_price_api()
+    #df_api = ingredient_price_api()
     # print(df_api.head(10))
-    df_crawling = ingredient_price_crawling()
-    print(df_crawling)
+    #df_crawling = ingredient_price_crawling()
+    #print(df_crawling)
 
     # df_api.to_csv('ingredient_price_1.csv', index=False, encoding='utf-8-sig')
     # df_crawling.to_csv('ingredient_price_2.csv', index=False, encoding='utf-8-sig')
 
+    get_kamis_data()
