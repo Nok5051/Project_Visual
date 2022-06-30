@@ -27,6 +27,7 @@ for category in categories:
 for menu in menu_ul:
     menu_list.append(menu.text)
 
+menu_list = ['냉면']
 # 메뉴 정확순 정렬
 # for menu in test_menu:
 for menu in menu_list:
@@ -121,8 +122,8 @@ df_ingd = DataFrame(data)
 
 
 # json 변환
-with open('./recipe_table.json', 'w', encoding='utf-8') as file:
+with open('./recipe_data/recipe_table.json', 'w', encoding='utf-8') as file:
     df_recipe.to_json(file, force_ascii=False)
 
-with open('./recipe_ingredient_table.json', 'w', encoding='utf-8') as file:
+with open('./recipe_data/recipe_ingredient_table.json', 'w', encoding='utf-8') as file:
     df_ingd.to_json(file, force_ascii=False)
