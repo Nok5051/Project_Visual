@@ -14,3 +14,17 @@ class MyBoard(models.Model):
                     'mytitle': self.mytitle,
                     'mycontent': self.mycontent,
                     'mydate': self.mydate})
+
+
+class RecipeTable(models.Model):
+    RECIPE_NM = models.CharField(max_length=20)
+    QNT = models.CharField(max_length=10)
+    RECIPE = models.CharField(max_length=2000)
+
+    def __str__(self):
+        return str({'RECIPE_NM': self.RECIPE_NM,
+                    'QNT': self.QNT,
+                    'RECIPE': self.RECIPE})
+
+
+
