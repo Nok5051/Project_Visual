@@ -8,12 +8,39 @@
 from django.db import models
 
 
+class Category(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    category = models.CharField(db_column='CATEGORY', max_length=10)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'Category'
+
+
+class MapStore(models.Model):
+    addr = models.CharField(max_length=255, blank=True, null=True)
+    storename = models.CharField(max_length=255, blank=True, null=True)
+    storetype = models.CharField(max_length=255, blank=True, null=True)
+    callnum = models.CharField(max_length=255, blank=True, null=True)
+    menu1 = models.CharField(max_length=255, blank=True, null=True)
+    menu2 = models.CharField(max_length=255, blank=True, null=True)
+    menu3 = models.CharField(max_length=255, blank=True, null=True)
+    menu1_price = models.IntegerField(blank=True, null=True)
+    menu2_price = models.IntegerField(blank=True, null=True)
+    menu3_price = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Map_store'
+
+
 class Recipe(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     recipe_nm = models.CharField(db_column='RECIPE_NM', max_length=20)  # Field name made lowercase.
+    category = models.CharField(db_column='CATEGORY', max_length=10)  # Field name made lowercase.
     qnt = models.CharField(db_column='QNT', max_length=10)  # Field name made lowercase.
-    recipe = models.CharField(db_column='RECIPE', max_length=1000)  # Field name made lowercase.
-    ingredients = models.CharField(db_column='INGREDIENTS', max_length=2000)  # Field name made lowercase.
+    recipe = models.CharField(db_column='RECIPE', max_length=2000)  # Field name made lowercase.
+    ingredients = models.CharField(db_column='INGREDIENTS', max_length=1000)  # Field name made lowercase.
     units = models.CharField(db_column='UNITS', max_length=1000)  # Field name made lowercase.
 
     class Meta:
@@ -22,9 +49,10 @@ class Recipe(models.Model):
 
 
 class StandardPrice(models.Model):
-    ingredient = models.TextField(db_column='INGREDIENT', blank=True, null=True)  # Field name made lowercase.
-    unit = models.TextField(db_column='UNIT', blank=True, null=True)  # Field name made lowercase.
-    unit_price = models.TextField(db_column='UNIT_PRICE', blank=True, null=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    ingredient_nm = models.CharField(db_column='INGREDIENT_NM', max_length=20)  # Field name made lowercase.
+    unit = models.CharField(db_column='UNIT', max_length=10)  # Field name made lowercase.
+    price = models.CharField(db_column='PRICE', max_length=20)  # Field name made lowercase.
 
     class Meta:
         managed = False
