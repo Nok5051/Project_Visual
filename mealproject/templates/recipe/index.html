@@ -7,6 +7,23 @@
 <body>
 
   <h1>RECIPE</h1>
+  
+  <ul>
+    
+    <form action="" method="GET">
+      <div>
+        {% for data in list %}
+          <tr>
+              <td>{{ data.id }}</td>
+              <td>{{ data.recipe_nm }}</td>
+              <td><a href="#">{{ data.qnt }}</a></td>
+              <!-- date 어떤 형식으로 나오게 할지 지정가능 -->
+          </tr>
+        {% endfor %}
+      </div>
+    </form>
+    
+  </ul>
 
 </body>
 </html>

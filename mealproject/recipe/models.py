@@ -9,10 +9,12 @@ from django.db import models
 
 
 class Recipe(models.Model):
-    num = models.IntegerField(db_column='Num', blank=True, null=True)  # Field name made lowercase.
-    recipe_nm = models.TextField(db_column='Recipe_nm', blank=True, null=True)  # Field name made lowercase.
-    qnt = models.TextField(db_column='Qnt', blank=True, null=True)  # Field name made lowercase.
-    recipe = models.TextField(db_column='Recipe', blank=True, null=True)  # Field name made lowercase.
+    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    recipe_nm = models.CharField(db_column='RECIPE_NM', max_length=20)  # Field name made lowercase.
+    qnt = models.CharField(db_column='QNT', max_length=10)  # Field name made lowercase.
+    recipe = models.CharField(db_column='RECIPE', max_length=1000)  # Field name made lowercase.
+    ingredients = models.CharField(db_column='INGREDIENTS', max_length=2000)  # Field name made lowercase.
+    units = models.CharField(db_column='UNITS', max_length=1000)  # Field name made lowercase.
 
     class Meta:
         managed = False
