@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>간단한 지도 표시하기</title>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ClientID"></script>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ClientID&submodules=geocoder"></script>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ClientID&submodules=geocoder"></script>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=h0hatymncv"></script>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=h0hatymncv&submodules=geocoder"></script>
 </head>                                                                                     <!-- ( 인증값 넣어야함 ) --> 
 <body>
 <div id="map" style="width:60%;height:600px;"></div>
@@ -1330,44 +1329,30 @@ naver.maps.onJSContentLoaded = initGeocoder;
 
 //----------------------
 
-/*
-새로운 지도 더 부드러운 모션 코드
 
-var map = new naver.maps.Map('map', {
-   
-    useStyleMap: true,
-    zoom: 16,
-    center: new naver.maps.LatLng(37.5666103, 126.9783882)
+
+var map = new naver.maps.Map("map", {
+  center: new naver.maps.LatLng(37.5666103, 126.9783882),  // 서울시 좌표
+  zoom: 15,
+  mapTypeControl: true
 });
 
-map.setOptions('minZoom', 10);
-console.log('잘못된 참조 시점', map.getOptions('minZoom') === 10);
-
-
-naver.maps.Event.once(map, 'init', function () {
-    console.log('올바른 참조 시점', map.getOptions('minZoom') === 10);
+var infoWindow = new naver.maps.InfoWindow({
+  anchorSkew: true
 });
+                                        // 검색할 주소 넣어주면 됨
+naver.maps.Service.geocode({ address: '경기도 용인시 기흥구 강남로 40' }, function(status, response) {
+            if (status === naver.maps.Service.Status.ERROR) {
+                return alert('Something wrong!');
+            }
+            var new_position = new naver.maps.LatLng(response.v2.addresses[0].y, response.v2.addresses[0].x)
+            map.setCenter(new_position);   // 요구하는 검색 주소로 이동하면 그 주변 지도 값 표현
 
-var data = [
-    new naver.maps.LatLng(37.75,125.4),
-    new naver.maps.LatLng(35.42,128.56),
-    new naver.maps.LatLng(35.57,128.34),
-
-    
-
-    new naver.maps.LatLng(36.30,125.9),
-    new naver.maps.LatLng(35.80,128.2),
-    new naver.maps.LatLng(38.70,127.9)
-];
+        });
 
 
-naver.maps.onJSContentLoaded = function() {
-    var heatmap = new naver.maps.visualization.HeatMap({
-        map: map,
-        data: data
-    });
-};
-*/
+// 보유한 데이터 값을 통해 미리 다중 마커를 지도에 표기해두고 검색 주소로 이동시켜 해당 위치의 마커들을 표시해주는 코드를 만들 예정
+
 
 </script>
 </body>
