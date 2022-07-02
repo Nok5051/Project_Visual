@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
-    path('maindish/', views.category, name='category'),
+    path('getCategory/', views.getCategory),
+    path('getMenu/', views.getMenu),
 ]

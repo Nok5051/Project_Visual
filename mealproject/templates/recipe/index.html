@@ -12,15 +12,77 @@
             border: 1px black;
             margin: 10px;
             text-align : center;
-            background-color : white;
             color : black;
+        }
+
+        #cg{
+          background-color : yellow;
+        }
+
+        #body{
+          background-color : green;
         }
 
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    
+      $(function(){
+        $.ajax({
+          url: 'getCategory/',
+          dataType: 'json',
+          success: function(msg){
+            var values = Object.values(msg)
+            var $cg = $("#cg")
+            for (var i = 0; i < values.length; i++){
+
+              $cg.append($("<button class='category'>").val(values[i]['category']).text(values[i]['category']));
+          
+            }
+          },
+          error: function(){
+            alert('카테고리 통신 실패');
+          }
+
+        });
+
+        $("#cg").on('click', 'button', function(){
+          console.log("click")
+          var category = $(this).val();
+          getMenu(category);
+        });
+      })
+
+      function getMenu(category){
+        console.log(category)
+        $.ajax({
+          url: 'getMenu/',
+          data: {'category': category},
+          dataType: 'json',
+          success: function(msg){
+            var values = Object.values(msg)
+            $("#content").empty()
+
+            
+            for (var i = 0; i < values.length; i++){
+              console.log(values[i]['recipe_nm'])
+              $("#content").append($("<tr class="+i+">"));
+              $("."+i+"").append($("<td>").html(values[i]['recipe_nm']));
+              $("."+i+"").append($("<td>").html(values[i]['qnt']));
+              $("."+i+"").append($("<td>").html(values[i]['recipe']));
+              $("."+i+"").append($("<td>").html(values[i]['ingredients']));
+              $("."+i+"").append($("<td>").html(values[i]['units']));
+              $("."+i+"").append($("<td>"));
+              $("."+i+"").append($("<td>"));
+              }
+
+            
+          }, error: function(){
+            alert('메뉴 통신 오류')
+          }
+
+        });
+      }
     </script>
 </head>
 <body>
@@ -31,21 +93,13 @@
       <h1>카테고리</h1>
   </div>
   <div>
-      <table border="1">
-          <colgroup>
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
-          </colgroup>
-              <tr>
-                {% for cg in catogories %}
-                  <th><a href="{{ cg.category }}/">{{ cg.category }}</a></th>
-                {% endfor %}
-              </tr>
-      </table>
+    <!-- <form action="" method="GET"> -->
+      <div id="cg">
+      </div>
+      <div id="test">
+        test 영역
+      </div>
+    <!-- </form> -->
   </div>
 
   <div id="body">
@@ -70,32 +124,8 @@
               <th>1인분 가격</th>
           </tr>
 
-          <tbody>
-            {% for data in list %}
-            <tr>
-              <td>
-                {{ data.recipe_nm }}
-              </td>
-              <td>
-                {{ data.qnt }}
-              </td>
-              <td>
-                {{ data.recipe|cut:"\n" }}
-              </td>
-              <td>
-                {{ data.ingredients }}
-              </td>
-              <td>
-                {{ data.units }}
-              </td>
-              <td>
-                <!-- 계산된 n인분 가격 -->
-              </td>
-              <td>
-                <!-- 위 가격/n -->
-              </td>
-            </tr>
-            {% endfor %}
+          <tbody id="content">
+
           </tbody>
       </table>
     </form>
