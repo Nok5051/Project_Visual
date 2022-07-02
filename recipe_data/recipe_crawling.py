@@ -9,7 +9,8 @@ from pandas import DataFrame
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
 
-categories = [53, 54, 55, 56, 61, 65]
+categories = {53:"면/만두", 54:"국/탕", 55:"찌개", 56:"메인반찬", 61:"퓨전", 65:"양식"}
+category_list = list()
 menu_ul = list()
 menu_list = list()
 servings = list()
@@ -22,13 +23,15 @@ for category in categories:
     target_url = f'https://www.10000recipe.com/recipe/list.html?q=&query=&cat1=&cat2=&cat3=&cat4={category}&fct=&order=reco&lastcate=cat4&dsearch=&copyshot=&scrap=&degree=&portion=&time=&niresource='
     resp = requests.get(target_url)
     soup = BeautifulSoup(resp.text, 'html.parser')
-    menu_ul.extend(soup.select('ul[class="tag_cont"] > li > a'))
+    menu_a = soup.select('ul[class="tag_cont"] > li > a')
+    for i in range(len(menu_a)):
+        category_list.append(categories[category])
+    menu_ul.extend(menu_a)
 
 for menu in menu_ul:
     menu_list.append(menu.text)
 
 # 메뉴 정확순 정렬
-# for menu in test_menu:
 for menu in menu_list:
     url = f'https://www.10000recipe.com/recipe/list.html?q={menu}&query=&cat1=&cat2=&cat3=&cat4=&fct=&order=accuracy&lastcate=order&dsearch=&copyshot=&scrap=&degree=&portion=&time=&niresource='
     driver.get(url)
@@ -99,18 +102,8 @@ for menu in menu_list:
         pass
 
 
-
-# print(test_menu)
-# print(menu_list, len(menu_list))
-# print(servings, len(servings))
-# print(recipes, len(recipes))
-# print(ingredients, len(ingredients))
-# print(units, len(units))
-
-
 # 레시피 데이터프레임 - 메뉴명, 인분, 레시피
-# data = {'RECIPE_NM': test_menu, 'QNT': servings, 'RECIPE': recipes}
-data = {'RECIPE_NM': menu_list, 'QNT': servings, 'RECIPE': recipes, 'INGREDIENTS': ingredients, 'UNITS': units}
+data = {'RECIPE_NM': menu_list,"CATEGORY":category_list, 'QNT': servings, 'RECIPE': recipes, 'INGREDIENTS': ingredients, 'UNITS': units}
 df_recipe = DataFrame(data)
 
 # json 변환
