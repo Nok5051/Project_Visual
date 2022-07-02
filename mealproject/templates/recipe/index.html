@@ -72,7 +72,7 @@
               $("."+i+"").append($("<td>").html(values[i]['recipe']));
               $("."+i+"").append($("<td>").html(values[i]['ingredients']));
               $("."+i+"").append($("<td>").html(values[i]['units']));
-              $("."+i+"").append($("<td>"));
+              $("."+i+"").append($("<td>").html(values[i]['total_price']));
               $("."+i+"").append($("<td>"));
               }
 
@@ -95,9 +95,6 @@
   <div>
     <!-- <form action="" method="GET"> -->
       <div id="cg">
-      </div>
-      <div id="test">
-        test 영역
       </div>
     <!-- </form> -->
   </div>
