@@ -42,6 +42,7 @@ class Recipe(models.Model):
     recipe = models.CharField(db_column='RECIPE', max_length=2000)  # Field name made lowercase.
     ingredients = models.CharField(db_column='INGREDIENTS', max_length=1000)  # Field name made lowercase.
     units = models.CharField(db_column='UNITS', max_length=1000)  # Field name made lowercase.
+    total_price = models.CharField(db_column='TOTAL_PRICE', max_length=2000)  # Field name made lowercase.
 
     class Meta:
         managed = False
