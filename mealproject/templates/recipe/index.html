@@ -11,13 +11,43 @@
         div{
             text-align : center;
         }
-
-        #cg{
-          background-color : yellow;
+        #show-graph{
+          margin-left: 10px;
         }
-
         #body{
           background-color : white;
+          margin: 10px;
+        }
+
+        button{
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          height: 50px;
+          width: 15%;
+          font-size: 100%;
+          font-weight: bold;
+          margin: 0px;
+          padding: 0px;
+          border: 1px;
+          background-color:lightblue ;
+
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          cursor: pointer;
+          transition: 0.5s;
+        }
+
+        button:active,
+        button:hover,
+        button:focus {
+          background-color:steelblue ;
+          outline: 0;
+          color: white;
+        }
+
+        table, td, th{
+          border: 1px solid black;
+          border-collapse: collapse;
         }
 
     </style>
@@ -85,7 +115,7 @@
 <body>
   
   <h1>RECIPE</h1>
-  <div class="recipe-table" style="float: left; width:60%;">
+  <div id="recipe-table" style="float: left; width:60%;">
       <div id="header">
       <h1>카테고리</h1>
       </div>
@@ -96,7 +126,7 @@
       <div id="body">
 
           <form action="" method="GET">
-          <table border="1">
+          <table>
 
           <colgroup>
               <col width="130px">
@@ -126,7 +156,7 @@
       </div>
   </div>
 
-  <div class="show-graph" style="float: right;">
+  <div id="show-graph" style="float: left; width: 35%;">
     <p>graphs here</p>
 <!--  mealproject app/static 폴더에 넣어야 함 (settings.py STATIC_URL 참고)  -->
     {% load static %}
