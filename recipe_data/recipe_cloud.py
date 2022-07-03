@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
 
-df = pd.read_csv('./recipe_data/standard_price.csv')
+df = pd.read_csv('standard_price.csv')
 # print(df.head(10))
 
 ingre = df['name']
@@ -28,14 +28,14 @@ for a in ingre_list :
 recipe_dic = dict(zip(ingre_list,count_list))
 print(recipe_dic)
 
-cloud = WordCloud(background_color='white', max_words=30, width=400, height=300, font_path='./recipe_data/Goyang.ttf').fit_words(recipe_dic)
+cloud = WordCloud(background_color='white', max_words=50, width=400, height=300, font_path='Goyang.ttf').fit_words(recipe_dic)
 
 '''
 visual = cloud.fit_words(recipe_dic)
 visual.to_image()
 visual.to_file('recipe.png')
 '''
-
+cloud.to_file('../mealproject/static/img/recipe_cloud.png')
 plt.imshow(cloud, interpolation='bilinear')
 plt.axis('off')
 plt.show()
