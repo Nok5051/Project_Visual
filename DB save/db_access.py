@@ -14,10 +14,15 @@ meal_db = pymysql.connect(
     charset='utf8'
 )
 
-
 cursor = meal_db.cursor(pymysql.cursors.DictCursor)
 
-sql = "show tables;"
+
+sql = "select * from Map_store;"
+
 cursor.execute(sql)
 result = cursor.fetchall()
 print(result)
+
+
+
+
