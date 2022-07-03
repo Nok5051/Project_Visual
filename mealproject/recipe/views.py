@@ -26,7 +26,6 @@ def getMenu(request):
     category = request.GET['category']
     recipes = Recipe.objects.filter(category=category)
     serialized_recipes = RecipeSerializer(recipes, many=True)
-    print(serialized_recipes)
     return Response(data=serialized_recipes.data)
 
 
