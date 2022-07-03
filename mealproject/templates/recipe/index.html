@@ -9,10 +9,7 @@
     <style>
 
         div{
-            border: 1px black;
-            margin: 10px;
             text-align : center;
-            color : black;
         }
 
         #cg{
@@ -20,7 +17,7 @@
         }
 
         #body{
-          background-color : green;
+          background-color : white;
         }
 
     </style>
@@ -66,14 +63,14 @@
             
             for (var i = 0; i < values.length; i++){
               console.log(values[i]['recipe_nm'])
-              $("#content").append($("<tr class="+i+">"));
-              $("."+i+"").append($("<td>").html(values[i]['recipe_nm']));
-              $("."+i+"").append($("<td>").html(values[i]['qnt']));
-              $("."+i+"").append($("<td>").html(values[i]['recipe']));
-              $("."+i+"").append($("<td>").html(values[i]['ingredients']));
-              $("."+i+"").append($("<td>").html(values[i]['units']));
-              $("."+i+"").append($("<td>").html(values[i]['total_price']));
-              $("."+i+"").append($("<td>"));
+              $("#content").append($("<tr id="+i+">"));
+              $("#"+i).append($("<td>").html(values[i]['recipe_nm']));
+              $("#"+i).append($("<td>").html(values[i]['qnt']));
+              $("#"+i).append($("<td>").html(values[i]['recipe']));
+              $("#"+i).append($("<td>").html(values[i]['ingredients']));
+              // $("#"+i).append($("<td>").html(values[i]['units']));
+              $("#"+i).append($("<td>").html(values[i]['total_price']));
+              $("#"+i).append($("<td>"));
               }
 
             
@@ -88,36 +85,35 @@
 <body>
   
   <h1>RECIPE</h1>
-  <div class="recipe-table" style="float: left; max-width:800px;">
+  <div class="recipe-table" style="float: left; width:60%;">
       <div id="header">
       <h1>카테고리</h1>
       </div>
       <div>
-        <!-- <form action="" method="GET"> -->
           <div id="cg">
           </div>
-        <!-- </form> -->
       </div>
-
-      <div id="body" style="max-height: 650px; overflow: scroll; overflow-x: hidden;">
+      <div id="body">
 
           <form action="" method="GET">
           <table border="1">
 
           <colgroup>
+              <col width="130px">
+              <col width="80px">
+              <col width="500px">
               <col width="200px">
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
+              <!-- <col width="100px"> -->
+              <col width="100px">
+              <col width="100px">
 
           </colgroup>
               <tr>
                   <th>메뉴</th>
-                  <th>n인분</th>
+                  <th>N인분</th>
                   <th>레시피</th>
                   <th>재료</th>
-                  <th>재료별 용량</th>
+                  <!-- <th>재료별 용량</th> -->
                   <th>가격</th>
                   <th>1인분 가격</th>
               </tr>
@@ -130,11 +126,11 @@
       </div>
   </div>
 
-  <div class="show-graph" style="float: left;">
-    <span>graphs here</span>
-<!--  왜.. 이미지를 못 불러오지...?  -->
+  <div class="show-graph" style="float: right;">
+    <p>graphs here</p>
+<!--  mealproject app/static 폴더에 넣어야 함 (settings.py STATIC_URL 참고)  -->
     {% load static %}
-    <img src="{% static 'img/recipe_cloud.png' %}" alt="레시피 클라우드">
+    <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드" width="100%">
 
   </div>
 
