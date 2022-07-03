@@ -88,45 +88,58 @@
 <body>
   
   <h1>RECIPE</h1>
-
-  <div id="header">
+  <div class="recipe-table" style="float: left; max-width:800px;">
+      <div id="header">
       <h1>카테고리</h1>
-  </div>
-  <div>
-    <!-- <form action="" method="GET"> -->
-      <div id="cg">
       </div>
-    <!-- </form> -->
+      <div>
+        <!-- <form action="" method="GET"> -->
+          <div id="cg">
+          </div>
+        <!-- </form> -->
+      </div>
+
+      <div id="body" style="max-height: 650px; overflow: scroll; overflow-x: hidden;">
+
+          <form action="" method="GET">
+          <table border="1">
+
+          <colgroup>
+              <col width="200px">
+              <col width="200px">
+              <col width="200px">
+              <col width="200px">
+              <col width="200px">
+
+          </colgroup>
+              <tr>
+                  <th>메뉴</th>
+                  <th>n인분</th>
+                  <th>레시피</th>
+                  <th>재료</th>
+                  <th>재료별 용량</th>
+                  <th>가격</th>
+                  <th>1인분 가격</th>
+              </tr>
+
+              <tbody id="content">
+
+              </tbody>
+          </table>
+        </form>
+      </div>
   </div>
 
-  <div id="body">
-    <form action="" method="GET">
-      <table border="1">
+  <div class="show-graph" style="float: left;">
+    <span>graphs here</span>
+<!--  왜.. 이미지를 못 불러오지...?  -->
+    {% load static %}
+    <img src="{% static 'img/recipe_cloud.png' %}" alt="레시피 클라우드">
 
-      <colgroup>
-          <col width="200px">
-          <col width="200px">
-          <col width="200px">
-          <col width="200px">
-          <col width="200px">
-
-      </colgroup>
-          <tr>
-              <th>메뉴</th>
-              <th>n인분</th>
-              <th>레시피</th>
-              <th>재료</th>
-              <th>재료별 용량</th>
-              <th>가격</th>
-              <th>1인분 가격</th>
-          </tr>
-
-          <tbody id="content">
-
-          </tbody>
-      </table>
-    </form>
   </div>
+
+
+
 
 </body>
 </html>
