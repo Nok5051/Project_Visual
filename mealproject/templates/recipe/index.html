@@ -2,11 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        div{
+            border: 1px black;
+            margin: 10px;
+            text-align : center;
+            color : black;
+        }
+
+        #cg{
+          background-color : yellow;
+        }
+
+        #body{
+          background-color : green;
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(function(){
+        $.ajax({
+          url: 'getCategory/',
+          dataType: 'json',
+          success: function(msg){
+            var values = Object.values(msg)
+            var $cg = $("#cg")
+            for (var i = 0; i < values.length; i++){
+
+              $cg.append($("<button class='category'>").val(values[i]['category']).text(values[i]['category']));
+          
+            }
+          },
+          error: function(){
+            alert('카테고리 통신 실패');
+          }
+
+        });
+
+        $("#cg").on('click', 'button', function(){
+          console.log("click")
+          var category = $(this).val();
+          getMenu(category);
+        });
+      })
+
+      function getMenu(category){
+        console.log(category)
+        $.ajax({
+          url: 'getMenu/',
+          data: {'category': category},
+          dataType: 'json',
+          success: function(msg){
+            var values = Object.values(msg)
+            $("#content").empty()
+
+            
+            for (var i = 0; i < values.length; i++){
+              console.log(values[i]['recipe_nm'])
+              $("#content").append($("<tr class="+i+">"));
+              $("."+i+"").append($("<td>").html(values[i]['recipe_nm']));
+              $("."+i+"").append($("<td>").html(values[i]['qnt']));
+              $("."+i+"").append($("<td>").html(values[i]['recipe']));
+              $("."+i+"").append($("<td>").html(values[i]['ingredients']));
+              $("."+i+"").append($("<td>").html(values[i]['units']));
+              $("."+i+"").append($("<td>").html(values[i]['total_price']));
+              $("."+i+"").append($("<td>"));
+              }
+
+            
+          }, error: function(){
+            alert('메뉴 통신 오류')
+          }
+
+        });
+      }
+    </script>
 </head>
 <body>
-
+  
   <h1>RECIPE</h1>
+  <div class="recipe-table" style="float: left; max-width:800px;">
+      <div id="header">
+      <h1>카테고리</h1>
+      </div>
+      <div>
+        <!-- <form action="" method="GET"> -->
+          <div id="cg">
+          </div>
+        <!-- </form> -->
+      </div>
+
+      <div id="body" style="max-height: 650px; overflow: scroll; overflow-x: hidden;">
+
+          <form action="" method="GET">
+          <table border="1">
+
+          <colgroup>
+              <col width="200px">
+              <col width="200px">
+              <col width="200px">
+              <col width="200px">
+              <col width="200px">
+
+          </colgroup>
+              <tr>
+                  <th>메뉴</th>
+                  <th>n인분</th>
+                  <th>레시피</th>
+                  <th>재료</th>
+                  <th>재료별 용량</th>
+                  <th>가격</th>
+                  <th>1인분 가격</th>
+              </tr>
+
+              <tbody id="content">
+
+              </tbody>
+          </table>
+        </form>
+      </div>
+  </div>
+
+  <div class="show-graph" style="float: left;">
+    <span>graphs here</span>
+<!--  왜.. 이미지를 못 불러오지...?  -->
+    {% load static %}
+    <img src="{% static 'img/recipe_cloud.png' %}" alt="레시피 클라우드">
+
+  </div>
+
+
+
 
 </body>
 </html>
