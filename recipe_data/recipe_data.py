@@ -74,7 +74,7 @@ for i in range(len(unit_key)):
 # 단위 중복 제거
 unit_dict_key = list(unit_dict.keys())
 value_list = []
-for i in range(3):
+for i in range(len(unit_dict_key)):
     try:
         value = unit_dict[unit_dict_key[i]]
         result = []
@@ -86,7 +86,24 @@ for i in range(3):
     except:
         pass
 
-      
+
+'''
+# 규칙 딕셔너리
+{"t":["티스푼", "작은술", "꼬집", "작은T", "직은술", "t"], "T":["큰T", "숟가락", "큰술", "Ts", "큰 술", "스픈", "스푼", "수저"],}
+# 단위 통일
+for i in range(len(unit_dict_key)):
+    try:
+        value = unit_dict[unit_dict_key[i]]
+        result = []
+        for item in value:
+            if item not in result:
+                result.append(item)
+        unit_dict[unit_dict_key[i]] = result
+        
+    except:
+        pass
+
+'''
 
 with open('./recipe_data/ingd-unit_check.csv', 'w', encoding="utf-8 sig") as f:
     writer = csv.writer(f)
