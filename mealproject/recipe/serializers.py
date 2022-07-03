@@ -15,6 +15,11 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class RecipeSerializer(serializers.ModelSerializer):
+    unit_price = serializers.SerializerMethodField()
+
     class Meta:
         model = Recipe
-        fields = "__all__"
+        fields = ('recipe_nm', 'qnt', 'recipe', 'ingredients', 'units', 'total_price', 'unit_price')
+
+    def get_unit_price(self, obj):
+        return round(int(obj.total_price) / int(obj.qnt[0]))
