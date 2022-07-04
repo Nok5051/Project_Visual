@@ -33,6 +33,7 @@ Data Science & Engineering 16th**<br>
 ​	**Crawling**
 
 - [만개의 레시피](https://www.10000recipe.com/)
+- [네이버 매장 메뉴, 가격 데이터](www.naver.com)
 
 <br>
 
