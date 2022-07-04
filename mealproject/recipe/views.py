@@ -1,7 +1,5 @@
-# from django.http import JsonResponse
 from django.shortcuts import render
-# from django.core import serializers
-# from django.http import HttpResponse
+from django.core import serializers
 from .models import *
 
 # pip install djangorestframework
@@ -29,4 +27,5 @@ def getMenu(request):
     recipes = Recipe.objects.filter(category=category)
     serialized_recipes = RecipeSerializer(recipes, many=True)
     return Response(data=serialized_recipes.data)
+
 
