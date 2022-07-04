@@ -43,33 +43,36 @@ for recipe in df_rc['UNITS']:
         if recipe[j] == '':
             recipe[j] = 1
 
-# 표준 단위
+
+# 표준단위 변환 작업 시작
 
 # 재료별 수량이 어떻게 적혀있는지 확인
+
 unit_key = []
 for i in df_rc["INGREDIENTS"]:
-    unit_key.append(i)
+    unit_key.append(i)  # [['파스타면', '물', '올리브유'], ['라면', '대파', '계란']]
 
 unit_value = []
 for i in df_rc["UNITS"]:
-    unit_value.append(i)
+    unit_value.append(i)  # [['1', '1', '1'], ['1개', '조금', '1개']]
 
+'''
 unit_dict = dict()
 
-for i in range(len(unit_key)):
-    for j in range(len(unit_key[i])):
+for i in range(len(unit_key)): # 메뉴 숫자만큼
+    for j in range(len(unit_key[i])): # 재료 숫자만큼
         if unit_key[i][j] in unit_dict:
             try:
-                # 단위 확인 : 숫자 삭제
-                val = unit_value[i][j]
-                strval = re.sub(r'[0-9]+', '', val)
+                # 단위 확인 : 특수문자, 숫자 삭제
+                strval = unit_value[i][j]
+                strval = re.sub(r"[^A-Za-z가-힣+]", "", strval)
                 unit_dict[unit_key[i][j]].append(strval)
-
             except:
                 pass
         else:
-            unit_dict[unit_key[i][j]] = [unit_value[i][j]]
-
+            strval = unit_value[i][j]
+            strval = re.sub(r"[^A-Za-z가-힣+]", "", strval)
+            unit_dict[unit_key[i][j]] = [strval]
 
 # 단위 중복 제거
 unit_dict_key = list(unit_dict.keys())
@@ -86,30 +89,154 @@ for i in range(len(unit_dict_key)):
     except:
         pass
 
+'''
+
+# 실제 재료별 용량 딕셔너리
+real_dict = dict()
+
+for i in range(len(unit_key)): # 메뉴 숫자만큼
+    for j in range(len(unit_key[i])): # 재료 숫자만큼
+        if unit_key[i][j] in real_dict:
+            try:
+                # 단위 확인 : 특수문자, 숫자 삭제
+                strval = unit_value[i][j]
+                real_dict[unit_key[i][j]].append(strval)
+            except:
+                pass
+        else:
+            strval = unit_value[i][j]
+            real_dict[unit_key[i][j]] = [strval]
+
+# with open('./recipe_data/ingd-unit_check.csv', 'w', encoding="utf-8 sig") as f:
+#     writer = csv.writer(f)
+#     for k, v in real_dict.items():
+#        writer.writerow([k, v])
+
 
 '''
-# 규칙 딕셔너리
-{"t":["티스푼", "작은술", "꼬집", "작은T", "직은술", "t"], "T":["큰T", "숟가락", "큰술", "Ts", "큰 술", "스픈", "스푼", "수저"],}
-# 단위 통일
-for i in range(len(unit_dict_key)):
+# 변환 규칙 리스트
+t = ["티스푼", "작은술", "꼬집", "작은T", "직은술", "ts", "tbsp"]
+T = ["큰T", "숟가락", "큰술", "Ts", "큰 술", "스픈", "스푼", "수저"]
+serving = ["인분분량", "인분(500원크기)", "500원 동전보다 살짝 크게 움켜쥔 정도(", "공기"]
+cup = ["cup", "종이컵",  "머그컵", "C","부(그릇)"]
+one = ["적당량", "적량", "적당양", "적당히", "닭가슴살이코팅될정도", "기호에따라", "500원 동전보다 살짝 크게 움켜쥔(", "500원동전크기", "멸치육수", "계량", "떡", "전부" , "먹을만큼", "자박하게"]
+half = ["조금", "약간", "소량", "톡톡", "솔솔", "작은거"]
+two = ["왕창", "넉넉히", "듬뿍"]
+ea = ["뿌리", "대", "ea", "알", "통", "쪽", "마리", "톨", "포기", "모", "줄", "박스", "캔", "국자", "병"]
+kg = ["kg"]
+L = ["L"]
+zum = ["줌", "100원짜리 만큼"]
+set1 = ["묶음", "단"]
+piece = ["토막", "도막"]
+gun = ["근"]
+
+cupml = ["컵"]
+ml = [" ㎖"]
+g = ["그램"]
+blank = [" \u200b", "(약 400ml 정도)", "(생략가능)", "(1개)", "(없으면 맛간장으로", ")"]
+ttoT = ["t"]
+
+
+
+# 단위 변환
+for i in range(len(unit_key)): # 메뉴 숫자만큼
+    for j in range(len(unit_key[i])): # 재료 숫자만큼
+        for n in range(len(real_dict[unit_key[i][j]])):
+            for keyword in t:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "t")
+            for keyword in T:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "T")
+            for keyword in serving:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "인분")
+            for keyword in cup:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "컵")
+            for keyword in one:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "1")
+            for keyword in half:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "0.5")
+            for keyword in two:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "2")
+            for keyword in ea:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "개")
+            for keyword in kg:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*1000g")
+            for keyword in L:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*1000ml")
+            for keyword in zum:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*10g")
+            for keyword in set1:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*10개")
+            for keyword in piece:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "/5개")
+            for keyword in gun:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*600g")
+
+
+            for keyword in cupml:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*180ml")
+            for keyword in g:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "g")
+            for keyword in ml:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "ml")
+            for keyword in blank:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "")
+            for keyword in ttoT:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "/3T")
+
+with open('./recipe_data/ingd-unit_check.csv', 'w', encoding="utf-8 sig") as f:
+    writer = csv.writer(f)
+    for k, v in real_dict.items():
+        writer.writerow([k, v])
+'''
+
+# 표준 단위 CSV와 단위 맞추기 (수작업 - json으로 만들기)
+# 수작업 파일 불러오기
+# df_unit = pd.read_csv("./recipe_data/ingd-unit_check_fin.csv")
+
+'''
+# 계산 가능하게 UNITS 변환
+# UNITS 값 리스트 변환
+for i in range(len(df_unit["UNITS"])):
+    x = df_unit["UNITS"][i]
+    x = ast.literal_eval(x)
+    df_unit["UNITS"][i] = x
+
+
+# 재료-unit 맞춰서 데이터프레임 넣기
+for i in range(len(df_rc["INGREDIENTS"])): # 메뉴 숫자만큼
     try:
-        value = unit_dict[unit_dict_key[i]]
-        result = []
-        for item in value:
-            if item not in result:
-                result.append(item)
-        unit_dict[unit_dict_key[i]] = result
-        
+        for j in range(len(df_rc["INGREDIENTS"][i])): # 메뉴의 재료 숫자만큼
+                for n in range(len(df_unit["INGREDIENT"])):
+                    if df_rc["INGREDIENTS"][i][j] == df_unit["INGREDIENT"][n]:
+                        # print(df_unit["INGREDIENT"][n])
+                        # print(df_unit["UNITS"][n])
+                        # print("이전 : ", df_rc["UNITS"][i][j])
+                        df_rc["UNITS"][i][j] = df_unit["UNITS"][n].pop(0)
+                        # print("이후 : ", df_rc["UNITS"][i][j])
+
     except:
         pass
 
 '''
-
-with open('./recipe_data/ingd-unit_check.csv', 'w', encoding="utf-8 sig") as f:
-    writer = csv.writer(f)
-    for k, v in unit_dict.items():
-       writer.writerow([k, v])
-
 
 '''
 df_rc["UNITS"] = [[1, 1, 1],[1, 0.5, 1],[1, 0.25, 0.0625, 0.5, 100, 1, 1, 0.016, 1, 0.5, 0.25, 0.25, 0.032, 2, 1, 2, 4, 8, 3, 3, 1, 0.2],[400],[1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[100, 1, 0.25, 1, 1, 1, 1, 4, 1, 0.5],[400, 0.5, 0.5, 0.5, 50, 0.5, 1.44, 2, 1, 0.5, 0.5],[200, 30, 0.5, 1, 2, 0.5],[1, 0.5, 0.5, 1, 1],[3, 0.5, 5, 0.5, 1],[100, 0.0125, 0.5, 0.5, 1, 2, 1, 0.5, 0.5, 0.33, 0.33, 0.33],[1, 1, 1, 2, 0.5, 0.5, 3],[5, 5, 0.2, 1, 0.5, 0.165, 0.495, 1, 1, 1.44, 8, 1, 1, 0.5],[1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1/2, 1, 1, 1, 1, 1/3, 1/2],[1, 1, 1, 1, 1, 1],[0.5, 2, 0.25, 3, 3, 2, 5],[0.25, 0.5, 0.5, 0.25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[2, 1, 0.5],[1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1],[3, 0.5, 5, 0.5, 3, 3, 0.33, 0.5],[2, 2, 1, 2],[200, 350, 250, 2, 1, 1, 1, 1.5, 1],[1, 0.5, 0.5, 7, 2, 2, 0.5, 1],[1, 3, 10, 0.5, 0.5, 0.5, 0.25, 1],[1, 1, 1, 1, 1],[150, 1, 630, 10, 1.5, 0.5, 1, 1, 0.5],[1, 0.09, 1],[1, 10, 1, 10, 2, 0.5],[1, 1, 1, 1, 1, 1],[500, 2, 2, 1, 0.5, 2, 0.5, 1],[10, 1, 2, 10, 0.5, 20, 1, 1, 2, 1],[1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1],[1, 1, 1, 1, 1],[2, 0.5, 500],[200, 1.6, 2, 1, 2, 1, 4, 3, 1, 1, 0.5, 0.5],[1, 1, 1, 1, 1, 1, 1],[5, 1, 1, 500, 0.5],[160, 4, 500, 0.135, 1, 1, 0.5],[1, 6, 1, 1],[700, 0.5, 2, 1, 2, 1, 2.4, 4, 2, 1, 1, 3, 2, 3, 0.5],[20, 0.5, 10, 0.5, 0.5, 0.9, 1.5],[100, 0.25, 1, 1, 0.5, 1, 1, 4, 1, 1, 0.5],[2, 0.5, 2, 2, 2, 1, 2, 2, 4, 3, 1.5, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 0.66, 0.5, 1, 1, 1, 1, 1],[1250, 37, 10, 0.5, 1, 3, 0.5, 0.5, 0.5],[1, 1, 1, 0.5, 0.5, 1, 8, 2, 1, 1, 0.5, 1],[1, 4, 6, 10, 3, 0.5, 3, 3, 4, 1.5, 0.5, 1, 3, 2, 1, 1],[1, 1.5, 1, 1, 2, 1.5],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[175, 0.66, 1, 1],[80, 2, 3, 0.33, 1, 1, 1, 2, 1, 3, 1],[2, 0.16, 0.5, 1, 1, 0.5, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 0.5, 0.25, 0.5, 0.25, 1.5, 1, 1, 1],[200, 0.25, 2, 0.5, 0.5],[1, 0.5, 0.5, 1, 2, 1, 2, 1, 20, 4, 1, 1, 1],[1, 1, 1, 0.25, 0.5, 0.25, 0.5, 1],[200, 0.5, 1, 0.5, 200, 50, 2, 2, 1, 0.5, 0.5],[1, 1, 1, 1, 1, 1, 1],[0.25, 0.5, 0.66, 1, 1, 1, 1, 1, 1, 1, 0.6],[300, 0.5, 1, 1, 0.5, 0.33, 0.5, 1],[1, 0.5, 0.5, 1, 20, 1, 0.5, 1, 4],[2, 0.25, 10, 1, 10, 2, 10, 3, 2, 5, 2, 1, 2.5, 1.5, 9, 1, 2, 3, 10, 2, 0.5, 0.5, 3, 1, 1.8],[200, 0.5, 0.25, 1, 1, 0.5, 2, 0.5, 4, 4, 1],[0.5, 3, 1, 1, 0.5, 0.36, 0.66, 3, 1, 2, 1, 1, 1],[100, 2, 0.5, 0.5, 0.5, 1, 0.5, 3, 1, 0.5, 2, 1, 1, 0.5],[2, 1, 0.5, 1, 1, 0.5, 1, 0.5],[300, 1, 1/2, 1/2, 1, 1, 1, 1, 1, 1.5, 1, 0.5, 1*10, 12],[200, 100, 100, 1, 1, 3, 1, 1.5, 2, 1],[0.66, 0.5, 0.5, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[4, 100, 100, 0.5, 1, 1, 0.6, 2, 2, 1, 1, 1, 1, 1],[15, 1, 1, 0.5, 500, 1, 1, 1, 1],[0.36, 0.5, 0.5, 2, 0.5, 0.5, 1.5, 0.5, 0.5, 0.5, 0.5],[1, 1, 1, 1, 1, 1, 1, 1],[2, 1, 1/2, 1/3, 0.5, 2, 2, 1/2, 0.5, 0.5, 1],[300, 1, 120, 2, 1, 1, 5, 4, 1, 4],[3, 0.5, 0.66, 0.5, 1, 1, 4, 400, 2, 1, 4, 1, 1, 1.5],[1, 1, 0.5, 1, 1, 0.5, 1, 0.5, 0.5, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1],[600, 1, 2, 0.25, 4, 2, 2, 1.5, 1, 0.5],[3, 0.25, 0.66, 2, 1, 2, 0.66, 0.5, 1, 0.5],[1, 2, 1, 1, 1, 1, 1, 0.5, 0.9, 10, 10, 1, 3, 4, 1, 2, 1, 1, 0.5],[550, 1, 1, 1, 10, 6, 1, 2, 2, 2, 1],[1, 1, 1, 300, 3, 4, 3, 1, 3, 2, 0.5, 0.5],[5000, 36, 9, 1, 18, 1, 0.5, 1, 3, 5, 1.5, 0.54, 3, 1, 1, 1, 0.5, 3, 2],[1, 5, 1*400, 3*180, 1/2*180, 1/4, 1*180],[330, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 4, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[400, 1, 0.5, 0.25, 1, 2, 2, 1, 1, 1, 2, 4, 4, 2, 10],[1500, 200, 1, 300, 100, 0.25, 8, 3, 0.25, 8, 0.25, 1, 3],[1, 0.25, 0.5, 1, 4, 1, 150, 0.5, 0.5, 4, 2, 1, 1, 1, 0.5, 2, 4, 0.05],[1, 1],[1, 300,  0.5, 100, 0.25 , 0.66 , 2, 0.25 , 0.09],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 100, 0.03, 0.5],[400, 4, 4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.15],[7, 3, 7, 1],[8, 0.5, 1, 0.25, 3],[600, 1, 6, 1, 1, 1, 3, 1, 2, 1, 1, 1, 1, 1, 1],[125, 1, 2, 30, 0.5, 0.1, 3, 2.5, 0.3, 0.15, 2, 1, 1, 0.5],[1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1],[7, 1.5, 0.5, 0.5, 1, 0.5, 2, 1, 2, 2, 1, 1, 2, 5, 1, 0.5],[3, 1, 1, 0.2, 0.16, 2, 1, 2, 0.5, 1, 4, 1, 3, 1, 1, 2, 1, 1, 1],[1000, 10, 1, 0.66, 1, 1.5, 0.5, 1],[1, 0.1, 1, 3, 0.5, 400, 1, 2, 5, 3, 3, 1, 2, 0.5],[12, 45, 2, 1, 0.3, 0.18, 10, 0.25, 0.5, 0.5],[1, 1, 1, 1, 1, 1, 1, 1, 1],[4, 20, 1, 20, 4, 100, 1, 100, 50, 30, 5, 0.5, 1, 0.5, 0.5, 30, 0.5],[1, 0.66, 0.2, 12, 1, 1, 0.5, 0.5],[2, 2, 1, 1, 2, 0.36],[1, 1, 1, 1, 1, 1, 1, 0.5],[8, 1, 1, 0.5, 1, 1, 1, 2, 1, 45, 5],[100, 0.5, 0.5, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5],[4, 2, 1, 1, 1],[6, 0.5, 1, 0.5, 0.25, 250, 20, 1, 200],[1, 0.1, 0.1, 3, 0.25, 0.16, 30, 30, 0.15, 240, 1, 0.5, 0.5],[1, 1, 1, 1, 1, 1, 1, 2, 3],[1, 100, 0.5, 10, 50, 5],[12, 1, 1, 1],[2, 2, 3, 1, 2, 1, 2, 1],[1, 3, 0.5, 0.125],[0.5, 20, 0.5, 3, 2, 2, 1, 0.5],[500, 1, 1, 4, 0.5, 0.5, 3, 2, 1.5, 1, 1, 1, 1],[5, 60, 2, 1, 1, 0.5],[200, 4, 0.5, 4, 4, 2, 10, 2, 2],[1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1],[0.075, 1, 0.1, 3, 0.5, 0.225, 1, 50, 0.08, 0.25, 0.08, 0.5, 0.5, 0.5, 0.5, 0.5],[1, 2, 3, 0.25, 2, 0.25, 0.5, 2, 2, 1, 4, 0.2],[300, 0.5, 0.5, 1, 3, 0.5, 1, 0.5, 0.5, 4, 2, 1, 2, 1],[2, 0.5, 1, 1, 1, 1, 0.3, 0.5],[4, 150, 100, 4, 0.5],[5, 2, 1, 1, 200, 1, 0.5, 1],[220, 40, 1, 5, 0.5, 0.5, 4, 4, 1, 0.5],[20, 7, 10, 0.5, 0.25, 0.5, 0.5, 0.5, 4, 1],[4, 50, 0.5, 0.5, 0.5, 1],[10, 20, 4, 1/4, 1, 1/3, 0.5, 0.5],[4, 1, 3, 2, 1, 1, 100, 8, 0.5, 5],[2, 1, 1, 1, 1, 2, 1, 1, 1, 1],[200, 1, 1, 1, 1, 1, 1, 1],[1, 8, 1, 0.30, 0.25, 0.25, 150, 1, 2, 0.4, 5],[1, 0.150, 1, 2],[1, 1, 1, 4, 1, 0.5, 1, 1],[5, 150, 2, 1, 0.5, 10, 0.5, 1, 1, 1, 1],[150, 1, 0.5, 0.5, 0.5, 3, 2, 2],[1, 0.5, 0.2, 4, 0.5, 10, 4, 1, 1, 4, 2, 1, 1],[1, 0.5, 0.5, 0.5],[5, 0.25, 1, 1, 0.5, 0.5, 4],[2, 1, 1, 20, 0.5, 1, 0.5, 0.15, 0.5, 0.5, 0.5],[3, 1, 15, 1, 30, 0.5, 0.5, 0.66, 0.25, 2, 2, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]]
