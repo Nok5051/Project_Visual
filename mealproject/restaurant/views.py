@@ -19,7 +19,8 @@ def getgugun(request):
     
     gugun = dict()
 
-    map_store = Map_store.objects.values_list('addr')
+    map_store = Map_store.objects.all()
+    map_addr = status.value_list('addr', flat=True)
 
     ms_list = map_store.values().str.split(' ')
     gugun['gu'] = ms_list.str.get(0)

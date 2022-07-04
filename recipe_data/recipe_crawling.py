@@ -101,6 +101,17 @@ for menu in menu_list:
     except:
         pass
 
+try:
+    # \n 제거
+    for j in range(len(recipes)):
+        for n in range(len(recipes[j])):
+            recipes[j][n] = recipes[j][n].replace("\n", "")
+    # 리스트 join
+    for j in range(len(recipes)):
+        recipes[j] = ' '.join(recipes[j])
+
+except:
+    pass
 
 # 레시피 데이터프레임 - 메뉴명, 인분, 레시피
 data = {'RECIPE_NM': menu_list,"CATEGORY":category_list, 'QNT': servings, 'RECIPE': recipes, 'INGREDIENTS': ingredients, 'UNITS': units}
