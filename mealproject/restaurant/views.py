@@ -1,5 +1,5 @@
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
 from .models import MapStore
@@ -43,8 +43,23 @@ def getdong(request):
                 value.extend(dong_lst[i])
 
     return JsonResponse(dong_dict)
+'''
+def insert_data(request):
+	if request.method == 'GET':
+        
+        gu = request.GET('gu')
+        dong = request.GET('dong')
+        menutype = request.GET('menutype')
+        pricetype = request.GET('pricetype')
 
 
-def map_index(request):
-    return render(request, 'restaurant/map.html')
 
+    context = {
+        'gu':gu,
+        'dong':dong,
+        'menutype':menutype,
+        'pricetype':pricetype
+        }
+
+    return redirect('restaurant/map.html', context)
+'''
