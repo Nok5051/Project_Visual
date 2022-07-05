@@ -5,53 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <style>
-
-        div{
-            text-align : center;
-        }
-        #show-graph{
-          margin-left: 10px;
-        }
-        #body{
-          background-color : white;
-          margin: 10px;
-        }
-
-        button{
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
-          height: 50px;
-          width: 15%;
-          font-size: 100%;
-          font-weight: bold;
-          margin: 0px;
-          padding: 0px;
-          border: 1px;
-          background-color:lightblue ;
-
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          cursor: pointer;
-          transition: 0.5s;
-        }
-
-        button:active,
-        button:hover,
-        button:focus {
-          background-color:steelblue ;
-          outline: 0;
-          color: white;
-        }
-
-        table, td, th{
-          border: 1px solid black;
-          border-collapse: collapse;
-        }
-
-    </style>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       $(function(){
@@ -96,10 +49,10 @@
               $("#content").append($("<tr id="+i+">"));
               $("#"+i).append($("<td>").html(values[i]['recipe_nm']));
               $("#"+i).append($("<td>").html(values[i]['qnt']));
-              $("#"+i).append($("<td>").html(values[i]['recipe']));
+              $("#"+i).append($("<td id='recipe'>").html(values[i]['recipe']));
               $("#"+i).append($("<td>").html(values[i]['ingredients']));
               // $("#"+i).append($("<td>").html(values[i]['units']));
-              $("#"+i).append($("<td>").html(values[i]['total_price']));
+              $("#"+i).append($("<td>").html(addComma(values[i]['total_price'])));
               $("#"+i).append($("<td>").html(values[i]['unit_price']));
               }
 
@@ -110,7 +63,62 @@
 
         });
       }
+
+      //천단위 콤마 펑션
+      function addComma(value){
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return value; 
+      }
     </script>
+    <style>
+
+        div{
+            text-align : center;
+        }
+        #show-graph{
+          margin-left: 10px;
+        }
+        #body{
+          background-color : white;
+          margin: 10px;
+        }
+
+        button{
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          height: 50px;
+          width: 15%;
+          font-size: 100%;
+          font-weight: bold;
+          margin: 0px;
+          padding: 0px;
+          border: 1px;
+          background-color:lightblue ;
+
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          cursor: pointer;
+          transition: 0.5s;
+        }
+
+        button:active,
+        button:hover,
+        button:focus {
+          background-color:steelblue ;
+          outline: 0;
+          color: white;
+        }
+
+        table, td, th{
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+
+        #recipe{
+            text-align : left;
+        }
+
+    </style>
 </head>
 <body>
   
@@ -144,8 +152,8 @@
                   <th>레시피</th>
                   <th>재료</th>
                   <!-- <th>재료별 용량</th> -->
-                  <th>가격</th>
-                  <th>1인분 가격</th>
+                  <th>가격 (원)</th>
+                  <th>1인분 가격 (원)</th>
               </tr>
 
               <tbody id="content">
