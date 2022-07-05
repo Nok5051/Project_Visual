@@ -6,45 +6,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
 </head>
+<style></style>
 
-<script src=""></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<style>
+<script>
+      $(function(){
+        $.ajax({
+          url: 'getgu/',
+          dataType: 'json',
+          success: function(msg){
+            var keys = Object.keys(msg)
 
-</style>
+            var $gu = $("#gu")
+            for (var i = 0; i < keys.length; i++){
+              $gu.append($("<option>").val(keys[i]).text(msg[keys[i]]));
+          
+            }
+          },
+          error: function(){
+            alert('구군 통신 실패');
+          }
+
+            });
+        });
+        
+
+
+</script>
 
 <body>
 
-<div class="wrapper">
-    <h2>지역을 선택해 주세요.</h1>
-    <input type="text" name="gu">&nbsp;구
-    <input type="text" name="gu">&nbsp;동
-    <br>
-    
-    <h2>원하는 메뉴를 골라주세요.</h2>
-    <select name="menu">
-        <option value="all">전체</option>
-        <option value="korea">한식</option>
-        <option value="china">중식</option>
-        <option value="western">양식</option>
-        <option value="japan">일식</option>
-        <option value="cafe">카페</option>
-    </select>
-    
-    <h2>가격대를 선정해 주세요.</h2>
-    <select name="price">
-        <option value="won60">전체</option>
-        <option value="won60">7000원 이하</option>
-        <option value="won70">7000원 이상 ~ 10000원 이하</option>
-        <option value="china">10000원 이상 ~ 15000원 이하</option>
-        <option value="china">15000원 초과</option>
-    </select>
-    
-    <p>
-    <input type="submit" value="확인">
-    </p>
+<form action="" method="get">
+    <div class="wrapper">
+        <h2>지역을 선택해 주세요.</h1>
+            <select id="gu">
+                <option value="all">구</option>
+            </select>
+            <select id="dong">
+                <option value="all">동</option>
+            </select>
+        <br>
+        
+        <h2>원하는 메뉴 형식을 골라주세요.</h2>
+        <select id="menu">
+            <option value="all">전체</option>
+            <option value="korea">한식</option>
+            <option value="china">중식</option>
+            <option value="western">양식</option>
+            <option value="japan">일식</option>
+            <option value="seafood">해산물</option>
+            <option value="every">뷔페</option>
+            <option value="soju">주류</option>
+            <option value="other">기타</option>
+            <option value="cafe">카페/디저트</option>
+        </select>
+        
+        <h2>가격대를 선정해 주세요.</h2>
+        <select name="price">
+            <option value="won_all">전체</option>
+            <option value="won_up1">7000원 이하</option>
+            <option value="won_up2">7000원 이상 ~ 10000원 이하</option>
+            <option value="won_up3">10000원 이상 ~ 15000원 이하</option>
+            <option value="won_up4">15000원 이상 ~ 20000원 이상</option>
+            <option value="won_up5">20000원 초과</option>
+        </select>
+        
+        <p>
+        <input type="submit" value="확인">
+        </p>
+    </div>
+</form>
 
-</div>
+
 
 </body>
 </html>

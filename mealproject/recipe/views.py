@@ -1,7 +1,11 @@
-# from django.http import JsonResponse
 from django.shortcuts import render
+<<<<<<< HEAD
 # from django.core import serializers
 # from django.http import HttpResponse
+=======
+from django.core import serializers
+from .models import *
+>>>>>>> de1c1f2de59157a0399bcf1f60407f1d4b34e4af
 
 # pip install djangorestframework
 # DRF
@@ -35,6 +39,7 @@ def getMenu(request):
     serialized_recipes = RecipeSerializer(recipes, many=True)
     return Response(data=serialized_recipes.data)
 
+<<<<<<< HEAD
 def chart(request):
     service_key = 'a934512a-e6a6-475b-963b-f5de5a551889'
     service_id = '2579'
@@ -120,4 +125,6 @@ def chart(request):
     plot_div = plot([Line(x=x_data, y=y_data,)], output_type='div')
 
     return render(request, 'recipe/index.html', context={'plot_div': plot_div})
+=======
+>>>>>>> de1c1f2de59157a0399bcf1f60407f1d4b34e4af
 

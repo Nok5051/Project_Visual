@@ -11,18 +11,45 @@
     <style>
 
         div{
-            border: 1px black;
-            margin: 10px;
             text-align : center;
-            color : black;
         }
-
-        #cg{
-          background-color : yellow;
+        #show-graph{
+          margin-left: 10px;
         }
-
         #body{
-          background-color : green;
+          background-color : white;
+          margin: 10px;
+        }
+
+        button{
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          height: 50px;
+          width: 15%;
+          font-size: 100%;
+          font-weight: bold;
+          margin: 0px;
+          padding: 0px;
+          border: 1px;
+          background-color:lightblue ;
+
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          cursor: pointer;
+          transition: 0.5s;
+        }
+
+        button:active,
+        button:hover,
+        button:focus {
+          background-color:steelblue ;
+          outline: 0;
+          color: white;
+        }
+
+        table, td, th{
+          border: 1px solid black;
+          border-collapse: collapse;
         }
 
     </style>
@@ -68,14 +95,14 @@
             
             for (var i = 0; i < values.length; i++){
               console.log(values[i]['recipe_nm'])
-              $("#content").append($("<tr class="+i+">"));
-              $("."+i+"").append($("<td>").html(values[i]['recipe_nm']));
-              $("."+i+"").append($("<td>").html(values[i]['qnt']));
-              $("."+i+"").append($("<td>").html(values[i]['recipe']));
-              $("."+i+"").append($("<td>").html(values[i]['ingredients']));
-              $("."+i+"").append($("<td>").html(values[i]['units']));
-              $("."+i+"").append($("<td>").html(values[i]['total_price']));
-              $("."+i+"").append($("<td>"));
+              $("#content").append($("<tr id="+i+">"));
+              $("#"+i).append($("<td>").html(values[i]['recipe_nm']));
+              $("#"+i).append($("<td>").html(values[i]['qnt']));
+              $("#"+i).append($("<td>").html(values[i]['recipe']));
+              $("#"+i).append($("<td>").html(values[i]['ingredients']));
+              // $("#"+i).append($("<td>").html(values[i]['units']));
+              $("#"+i).append($("<td>").html(values[i]['total_price']));
+              $("#"+i).append($("<td>").html(values[i]['unit_price']));
               }
           }, error: function(){
             alert('메뉴 통신 오류')
@@ -90,36 +117,35 @@
 <body>
   
   <h1>RECIPE</h1>
-  <div class="recipe-table" style="float: left; max-width:800px;">
+  <div id="recipe-table" style="float: left; width:60%;">
       <div id="header">
       <h1>카테고리</h1>
       </div>
       <div>
-        <!-- <form action="" method="GET"> -->
           <div id="cg">
           </div>
-        <!-- </form> -->
       </div>
-
-      <div id="body" style="max-height: 650px; overflow: scroll; overflow-x: hidden;">
+      <div id="body">
 
           <form action="" method="GET">
-          <table border="1">
+          <table>
 
           <colgroup>
+              <col width="130px">
+              <col width="80px">
+              <col width="500px">
               <col width="200px">
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
-              <col width="200px">
+              <!-- <col width="100px"> -->
+              <col width="100px">
+              <col width="100px">
 
           </colgroup>
               <tr>
                   <th>메뉴</th>
-                  <th>n인분</th>
+                  <th>N인분</th>
                   <th>레시피</th>
                   <th>재료</th>
-                  <th>재료별 용량</th>
+                  <!-- <th>재료별 용량</th> -->
                   <th>가격</th>
                   <th>1인분 가격</th>
               </tr>
@@ -132,6 +158,7 @@
       </div>
   </div>
 
+<<<<<<< HEAD
   <div class="show-graph" style="float: left;">
     <span>Ingredient Data</span>
     <div>
@@ -144,6 +171,13 @@
     
     </div>
     
+=======
+  <div id="show-graph" style="float: left; width: 35%;">
+    <p>graphs here</p>
+<!--  mealproject app/static 폴더에 넣어야 함 (settings.py STATIC_URL 참고)  -->
+    {% load static %}
+    <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드" width="100%">
+>>>>>>> de1c1f2de59157a0399bcf1f60407f1d4b34e4af
 
   </div>
 
