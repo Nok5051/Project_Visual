@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
 
@@ -75,8 +77,6 @@
               $("."+i+"").append($("<td>").html(values[i]['total_price']));
               $("."+i+"").append($("<td>"));
               }
-
-            
           }, error: function(){
             alert('메뉴 통신 오류')
           }
@@ -84,6 +84,8 @@
         });
       }
     </script>
+
+
 </head>
 <body>
   
@@ -131,13 +133,45 @@
   </div>
 
   <div class="show-graph" style="float: left;">
-    <span>graphs here</span>
-<!--  왜.. 이미지를 못 불러오지...?  -->
-    {% load static %}
-    <img src="{% static 'img/recipe_cloud.png' %}" alt="레시피 클라우드">
+    <span>Ingredient Data</span>
+    <div>
+      {% load static %}
+      <img src="{% static 'img/recipe_cloud.png' %}" alt="레시피 클라우드">
+    
+      <div class="chart">
+          <canvas id="myChart"></canvas>
+      </div>
+    
+    </div>
+    
 
   </div>
 
+    <script>
+      const labels = ['1년전', '1개월전', '20일전', '10일전', '1일전', '당일'];
+
+      const data = {
+        labels: labels,
+        datasets: [{
+          label: 'My First dataset',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: [0, 10, 5, 2, 20, 30, 45],
+        }]
+      };
+
+      const config = {
+        type: 'line',
+        data: data,
+        options: {}
+      };
+    </script>
+    <script>
+      const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+      );
+    </script>
 
 
 
