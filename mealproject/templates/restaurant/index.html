@@ -11,24 +11,28 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-      $(function(){
+      $("#gu").change(function(){
+        var gu = $(this).val();
         $.ajax({
           url: 'getdong/',
+          data: {'gu': gu},
           dataType: 'json',
           success: function(msg){
-            var keys = Object.keys(msg)
+            
+            var values = Object.values(msg)
+            
+            var $dong = $("#dong")
 
-            var $gu = $("#gu")
-            for (var i = 0; i < keys.length; i++){
-              $gu.append($("<option>").val(keys[i]).text(msg[keys[i]]));
+            for (var i = 0; i < values.length; i++){
+              if (gu == values[i][1]){
+                $dong.append($("<option>").val(values[i]['dong']).text(values[i]['dong']));
           
             }
-          },
+          }},
           error: function(){
             alert('구군 통신 실패');
           }
-
-            });
+          });
         });
         
 

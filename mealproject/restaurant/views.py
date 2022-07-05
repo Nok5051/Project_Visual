@@ -31,14 +31,19 @@ def getdong(request):
     for i in map_list:
         ms_list = i.split(' ')
 
-        dong_list.append(ms_list[0])
+        if ms_list not in dong_list:
+            dong_list.append(ms_list)
     
-    dong_set = set(dong_list) 
-    dong_lst = list(dong_set) 
-    
-    print(dong_lst)
+    gudong_list = []
+    name_list = ['gu', 'dong']
 
-    return JsonResponse(dong_dict)
+    for i in dong_list:
+        gudong_dict = dict(zip(name_list, i))
+        gudong_list.append(gudong_dict)
+        
+    print(gudong_list)
+
+    return JsonResponse(gudong_list)
 
 
 def map_index(request):
