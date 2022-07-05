@@ -106,6 +106,7 @@ try:
     for j in range(len(recipes)):
         for n in range(len(recipes[j])):
             recipes[j][n] = recipes[j][n].replace("\n", "")
+            recipes[j][n] = recipes[j][n] + "<br>"
     # 리스트 join
     for j in range(len(recipes)):
         recipes[j] = ' '.join(recipes[j])
