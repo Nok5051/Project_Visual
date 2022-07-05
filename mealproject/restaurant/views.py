@@ -43,8 +43,6 @@ def getdong(request):
         
     print(gudong_list)
 
-    return JsonResponse(gudong_list)
-
 
 def map_index(request):
     return render(request, 'restaurant/map.html')
