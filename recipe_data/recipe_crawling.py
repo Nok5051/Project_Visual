@@ -119,5 +119,5 @@ data = {'RECIPE_NM': menu_list,"CATEGORY":category_list, 'QNT': servings, 'RECIP
 df_recipe = DataFrame(data)
 
 # json 변환
-with open('./recipe_data/recipe_table.json', 'w', encoding='utf-8') as file:
+with open('./recipe_data/recipe_table_br.json', 'w', encoding='utf-8') as file:
     df_recipe.to_json(file, force_ascii=False)

@@ -5,7 +5,7 @@ import ast
 
 # 크롤링 데이터 불러오기
 
-with open('./recipe_data/recipe_table.json', 'rt', encoding='UTF8') as f:
+with open('./recipe_data/recipe_table_br.json', 'rt', encoding='UTF8') as f:
     rc = json.loads(f.read())
 
 df_rc = pd.DataFrame(rc)
@@ -42,6 +42,7 @@ for recipe in df_rc['UNITS']:
     for j in range(len(recipe)):
         if recipe[j] == '':
             recipe[j] = "1"
+
 
 # 표준단위 변환 작업 시작
 # 재료별 수량이 어떻게 적혀있는지 확인
@@ -208,6 +209,7 @@ for i in range(len(df_unit["UNITS"])):
     x = df_unit["UNITS"][i]
     x = ast.literal_eval(x)
     df_unit["UNITS"][i] = x
+
 print("UNITS 리스트 변환 성공")
 
 # 재료-unit 맞춰서 데이터프레임 넣기
@@ -217,6 +219,7 @@ for i in range(len(df_rc["INGREDIENTS"])): # 메뉴 숫자만큼
         # print(j)
         for n in range(len(df_unit["INGREDIENT"])):
             if df_rc["INGREDIENTS"][i][j] == df_unit["INGREDIENT"][n]:
+                print("n : ", n)
                 df_rc["UNITS"][i][j] = df_unit["UNITS"][n].pop(0)
 
 # df_rc.to_csv("./recipe_data/df_rc_unit.csv", encoding='utf-8-sig', header = 0)
@@ -254,5 +257,5 @@ print("재료 리스트 변환 완료")
 df_rc["TOTAL_PRICE"] = df_price["TOTAL_PRICE"]
 
 # csv export
-df_rc.to_csv("./recipe_data/df_rc.csv", encoding='utf-8-sig', header = 0)
+df_rc.to_csv("./recipe_data/df_rc_br.csv", encoding='utf-8-sig', header = 0)
 print("파일 변환 완료")
