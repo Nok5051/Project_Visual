@@ -39,7 +39,7 @@ def getdong(request):
         print(ms_list)
 
 
-    print(dong_lst)
+    print(dong_list)
 
 
     return JsonResponse(dong_dict)
