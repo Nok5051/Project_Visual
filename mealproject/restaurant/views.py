@@ -41,6 +41,21 @@ def getgu(request):
     return JsonResponse(gu_dict)
 
 
+def getdong(request):
+    dong_list = []
+    dong_dict = dict()
+
+    map_addr = MapStore.objects.values_list('addr', flat=True)
+    map_list = list(map_addr)
+
+    
+
+
+
+    return JsonResponse(dong_dict)
+
+
+
 
 
 def map_index(request):
