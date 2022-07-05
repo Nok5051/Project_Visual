@@ -20,28 +20,29 @@ def index(request):
 # https://devvvyang.tistory.com/37
 
 def getdong(request):
-    
-    dong_list = []
     dong_dict = dict()
-
+    gu_lst = []
+    dong_lst = []
     map_addr = MapStore.objects.values_list('addr', flat=True)
-    
     map_list = list(map_addr)
 
     for i in map_list:
         ms_list = i.split(' ')
+        gu_lst.append(ms_list[0])
+        ms_dong = []
+        ms_dong.append(ms_list[1])
+        dong_lst.append(ms_dong)
+ 
+    for i in range(len(gu_lst)):
+        if gu_lst[i] not in dong_dict:
+            dong_dict[gu_lst[i]] = dong_lst[i]
 
-        if ms_list not in dong_list:
-            dong_list.append(ms_list)
-    
-    gudong_list = []
-    name_list = ['gu', 'dong']
+        else:
+            value = dong_dict[gu_lst[i]]
+            if dong_lst[i][0] not in value:
+                value.extend(dong_lst[i])
 
-    for i in dong_list:
-        gudong_dict = dict(zip(name_list, i))
-        gudong_list.append(gudong_dict)
-        
-    print(gudong_list)
+    return JsonResponse(dong_dict)
 
 
 def map_index(request):
