@@ -31,16 +31,12 @@ def getdong(request):
     for i in map_list:
         ms_list = i.split(' ')
 
-        dong_dict['gu'] = ms_list[0]
-        dong_dict['dong'] = ms_list[1]
-        
-        if dong_dict not in dong_list:
-            dong_list.append(dong_dict)
-        print(ms_list)
-
-
+        dong_list.append(ms_list[0])
+    
+    dong_set = set(dong_list) 
+    dong_lst = list(dong_set) 
+    
     print(dong_lst)
-
 
     return JsonResponse(dong_dict)
 
