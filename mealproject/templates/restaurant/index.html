@@ -13,14 +13,14 @@
 <script>
       $(function(){
         $.ajax({
-          url: 'getgugun/',
+          url: 'getgu/',
           dataType: 'json',
           success: function(msg){
-            var values = Object.values(msg)
+            var keys = Object.keys(msg)
 
             var $gu = $("#gu")
-            for (var i = 0; i < values.length; i++){
-              $gu.append($("<option>").val(values[i]['gu']).text(values[i]['gu']));
+            for (var i = 0; i < keys.length; i++){
+              $gu.append($("<option>").val(keys[i]).text(msg[keys[i]]));
           
             }
           },

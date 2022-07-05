@@ -1,7 +1,11 @@
 
 from django.shortcuts import render
+from django.http import JsonResponse
+
+from .models import MapStore
 
 # pip install djangorestframework
+from django.core import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import *
@@ -15,21 +19,26 @@ def index(request):
 
 # https://devvvyang.tistory.com/37
 
-def getgugun(request):
+def getgu(request):
     
-    gugun = dict()
+    gu_list = []
+    gu_dict = dict()
 
-    map_store = Map_store.objects.all()
-    map_addr = status.value_list('addr', flat=True)
+    map_addr = MapStore.objects.values_list('addr', flat=True)
+    #print(list(map_addr))
 
-    ms_list = map_store.values().str.split(' ')
-    gugun['gu'] = ms_list.str.get(0)
-    gugun['dong'] = ms_list.str.get(1)
+    map_list = list(map_addr)
+    
+    for i in map_list:
 
-    print(ms_list)
-
-    serialized_gugun = CategorySerializer(gugun, many=True)
-    return Response(data=serialized_gugun.data)
+        ms_list = i.split(' ')
+        if ms_list[0] not in gu_list:
+            gu_list.append(ms_list[0])
+    
+        for y in range(len(gu_list)):
+            gu_dict[f'{y}'] = gu_list[y]
+    
+    return JsonResponse(gu_dict)
 
 
 
