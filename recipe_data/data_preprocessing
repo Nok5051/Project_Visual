@@ -1,0 +1,156 @@
+from recipe_data import df_preprocessing
+import csv
+
+# 표준단위 변환 작업 시작
+df_preprocessing()
+# 재료별 수량이 어떻게 적혀있는지 확인
+unit_key = []
+for i in df_rc["INGREDIENTS"]:
+    unit_key.append(i)  # [['파스타면', '물', '올리브유'], ['라면', '대파', '계란']]
+
+unit_value = []
+for i in df_rc["UNITS"]:
+    unit_value.append(i)  # [['1', '1', '1'], ['1개', '조금', '1개']]
+
+unit_dict = dict()
+
+for i in range(len(unit_key)): # 메뉴 숫자만큼
+    for j in range(len(unit_key[i])): # 재료 숫자만큼
+        if unit_key[i][j] in unit_dict:
+            try:
+                # 단위 확인 : 특수문자, 숫자 삭제
+                strval = unit_value[i][j]
+                strval = re.sub(r"[^A-Za-z가-힣+]", "", strval)
+                unit_dict[unit_key[i][j]].append(strval)
+            except:
+                pass
+        else:
+            strval = unit_value[i][j]
+            strval = re.sub(r"[^A-Za-z가-힣+]", "", strval)
+            unit_dict[unit_key[i][j]] = [strval]
+
+# 단위 중복 제거
+unit_dict_key = list(unit_dict.keys())
+value_list = []
+for i in range(len(unit_dict_key)):
+    try:
+        value = unit_dict[unit_dict_key[i]]
+        result = []
+        for item in value:
+            if item not in result:
+                result.append(item)
+        unit_dict[unit_dict_key[i]] = result
+
+    except:
+        pass
+
+
+
+# 실제 재료별 용량 딕셔너리
+real_dict = dict()
+
+for i in range(len(unit_key)): # 메뉴 숫자만큼
+    for j in range(len(unit_key[i])): # 재료 숫자만큼
+        if unit_key[i][j] in real_dict:
+            try:
+                # 단위 확인 : 특수문자, 숫자 삭제
+                strval = unit_value[i][j]
+                real_dict[unit_key[i][j]].append(strval)
+            except:
+                pass
+        else:
+            strval = unit_value[i][j]
+            real_dict[unit_key[i][j]] = [strval]
+
+# 변환 규칙 리스트
+t = ["티스푼", "작은술", "꼬집", "작은T", "직은술", "ts", "tbsp"]
+T = ["큰T", "숟가락", "큰술", "Ts", "큰 술", "스픈", "스푼", "수저"]
+serving = ["인분분량", "인분(500원크기)", "500원 동전보다 살짝 크게 움켜쥔 정도(", "공기"]
+cup = ["cup", "종이컵",  "머그컵", "C","부(그릇)"]
+one = ["적당량", "적량", "적당양", "적당히", "닭가슴살이코팅될정도", "기호에따라", "500원 동전보다 살짝 크게 움켜쥔(", "500원동전크기", "멸치육수", "계량", "떡", "전부" , "먹을만큼", "자박하게"]
+half = ["조금", "약간", "소량", "톡톡", "솔솔", "작은거"]
+two = ["왕창", "넉넉히", "듬뿍"]
+ea = ["뿌리", "대", "ea", "알", "통", "쪽", "마리", "톨", "포기", "모", "줄", "박스", "캔", "국자", "병"]
+kg = ["kg"]
+L = ["L"]
+zum = ["줌", "100원짜리 만큼"]
+set1 = ["묶음", "단"]
+piece = ["토막", "도막"]
+gun = ["근"]
+
+cupml = ["컵"]
+ml = [" ㎖"]
+g = ["그램"]
+blank = [" \u200b", "(약 400ml 정도)", "(생략가능)", "(1개)", "(없으면 맛간장으로", ")"]
+ttoT = ["t"]
+
+
+
+# 단위 변환
+for i in range(len(unit_key)): # 메뉴 숫자만큼
+    for j in range(len(unit_key[i])): # 재료 숫자만큼
+        for n in range(len(real_dict[unit_key[i][j]])):
+            for keyword in t:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "t")
+            for keyword in T:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "T")
+            for keyword in serving:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "인분")
+            for keyword in cup:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "컵")
+            for keyword in one:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "1")
+            for keyword in half:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "0.5")
+            for keyword in two:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "2")
+            for keyword in ea:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "개")
+            for keyword in kg:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*1000g")
+            for keyword in L:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*1000ml")
+            for keyword in zum:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*10g")
+            for keyword in set1:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*10개")
+            for keyword in piece:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "/5개")
+            for keyword in gun:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*600g")
+
+
+            for keyword in cupml:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*180ml")
+            for keyword in g:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "g")
+            for keyword in ml:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "ml")
+            for keyword in blank:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "")
+            for keyword in ttoT:
+                if keyword in real_dict[unit_key[i][j]][n]:
+                    real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "/3T")
+
+with open('./recipe_data/ingd-unit_check.csv', 'w', encoding="utf-8 sig") as f:
+    writer = csv.writer(f)
+    for k, v in real_dict.items():
+        writer.writerow([k, v])
