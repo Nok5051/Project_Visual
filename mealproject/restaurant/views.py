@@ -37,23 +37,6 @@ def getdong(request):
     gudong_list = []
     name_list = ['gu', 'dong']
 
-<<<<<<< HEAD
-def getdong(request):
-    dong_list = []
-    dong_dict = dict()
-
-    map_addr = MapStore.objects.values_list('addr', flat=True)
-    map_list = list(map_addr)
-
-    
-
-
-
-    return JsonResponse(dong_dict)
-
-
-
-=======
     for i in dong_list:
         gudong_dict = dict(zip(name_list, i))
         gudong_list.append(gudong_dict)
@@ -61,7 +44,6 @@ def getdong(request):
     print(gudong_list)
 
     return JsonResponse(gudong_list)
->>>>>>> 2d3647c8d6a299e969df321fb99e633c53eef472
 
 
 def map_index(request):

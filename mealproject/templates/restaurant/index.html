@@ -15,7 +15,7 @@
         var gu = $(this).val();
         $.ajax({
           url: 'getdong/',
-          data: {'gu': gu},
+          data: {'dong': },
           dataType: 'json',
           success: function(msg){
             
@@ -25,7 +25,7 @@
 
             for (var i = 0; i < values.length; i++){
               if (gu == values[i][1]){
-                $dong.append($("<option>").val(values[i]['dong']).text(values[i]['dong']));
+                $dong.append($("<option>").val("dong" + i).text(values[i]['dong']));
           
             }
           }},
