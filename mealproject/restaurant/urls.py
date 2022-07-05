@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = {
     path('', views.index),
-    path('getgu/', views.getgu),
+    path('getdong/', views.getdong),
     path('map_index/', views.map_index, name='mappage'),
     
 }
