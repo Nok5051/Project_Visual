@@ -226,11 +226,12 @@ for i in range(len(df_rc["INGREDIENTS"])): # 메뉴 숫자만큼
 df_ing = pd.read_csv('./recipe_data/standard_price.csv')
 print("가격 계산 시작")
 
+df_price = df_rc.copy()
 
 total_price = []
-for i in range(0, len(df_rc)):
-    ingredients = df_rc.iloc[i]['INGREDIENTS']
-    units = df_rc.iloc[i]['UNITS'] # ['1', '180', '1'] <class 'list'>
+for i in range(0, len(df_price)):
+    ingredients = df_price.iloc[i]['INGREDIENTS']
+    units = df_price.iloc[i]['UNITS'] # ['1', '180', '1'] <class 'list'>
     price = []
     for item in ingredients:
         temp_df = df_ing[df_ing['name'] == item]
@@ -241,20 +242,16 @@ for i in range(0, len(df_rc)):
         price_sum += eval(units[j]) * price[j]
     total_price.append(round(price_sum))
 
-df_rc["TOTAL_PRICE"] = total_price
-
+df_price["TOTAL_PRICE"] = total_price
 print("가격 계산 완료")
 
 # 재료 list to string
-
 for i in range(len(df_rc['INGREDIENTS'])): # df_rc.iloc[i]['INGREDIENTS'] = ['파스타면', '물', '올리브유']
-    # print("전 : ", type(df_rc.iloc[i]['INGREDIENTS']))
     df_rc.iloc[i]['INGREDIENTS'] = ", ".join(df_rc.iloc[i]['INGREDIENTS'])
-    print("후 : ", df_rc.iloc[i]['INGREDIENTS'], type(df_rc.iloc[i]['INGREDIENTS']))
 
+print("재료 리스트 변환 완료")
 
-print("재료 리스트 변환")
-
+df_rc["TOTAL_PRICE"] = df_price["TOTAL_PRICE"]
 
 # csv export
 df_rc.to_csv("./recipe_data/df_rc.csv", encoding='utf-8-sig', header = 0)
