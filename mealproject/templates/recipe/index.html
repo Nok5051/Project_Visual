@@ -5,70 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-
-        div{
-            text-align : center;
-        }
-        #show-graph{
-          margin-left: 10px;
-        }
-        #body{
-          background-color : white;
-          margin: 10px;
-        }
-
-        button{
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
-          height: 50px;
-          width: 15%;
-          font-size: 100%;
-          font-weight: bold;
-          margin: 0px;
-          padding: 0px;
-          border: 1px;
-          background-color:lightblue ;
-
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          cursor: pointer;
-          transition: 0.5s;
-        }
-
-        button:active,
-        button:hover,
-        button:focus {
-          background-color:steelblue ;
-          outline: 0;
-          color: white;
-        }
-
-        table, td, th{
-          border: 1px solid black;
-          border-collapse: collapse;
-        }
-
-        .rank{
-          float: left; 
-          width:50%;
-        }
-
-        .btn_rank{
-          height: 30%;
-          width: 90%;
-          font-size: 100%;
-          font-weight: bold;
-          margin: 10px;
-          padding: 0px;
-          border: 1px;
-          background-color:lightblue ;
-        }
-
-    </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -96,7 +38,7 @@
           var category = $(this).val();
           getMenu(category);
         });
-<!--    등락순위 재료버튼 누르면 그래프 그려짐-->
+        // 등락순위 재료버튼 누르면 그래프 그려짐
         $(".btn_rank").click(function(){
             var ingredient = $(this).val();
             console.log(ingredient);
@@ -176,53 +118,82 @@
         return value; 
       }
     </script>
-
     <style>
+      *{
+        font-family: 'Nanum Gothic', sans-serif;
+      }
 
-        div{
-            text-align : center;
-        }
-        #show-graph{
-          margin-left: 10px;
-        }
-        #body{
-          background-color : white;
-          margin: 10px;
-        }
+      div{
+          text-align : center;
+      }
+      #show-graph{
+        margin-left: 10px;
+      }
+      #body{
+        background-color : white;
+        margin: 10px;
+      }
 
-        button{
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
-          height: 50px;
-          width: 15%;
-          font-size: 100%;
-          font-weight: bold;
-          margin: 0px;
-          padding: 0px;
-          border: 1px;
-          background-color:lightblue ;
+      button{
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        height: 50px;
+        width: 15%;
+        font-size: 100%;
+        font-weight: bold;
+        margin: 0px;
+        padding: 0px;
+        border: 1px;
+        background-color:lightblue ;
 
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          cursor: pointer;
-          transition: 0.5s;
-        }
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        cursor: pointer;
+        transition: 0.5s;
+      }
 
-        button:active,
-        button:hover,
-        button:focus {
-          background-color:steelblue ;
-          outline: 0;
-          color: white;
-        }
+      button:active,
+      button:hover,
+      button:focus {
+        background-color:steelblue ;
+        outline: 0;
+        color: white;
+      }
 
-        table, td, th{
-          border: 1px solid black;
-          border-collapse: collapse;
-        }
+      table, td, th{
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+      }
 
-        #recipe{
-            text-align : left;
+      .rank{
+        float: left; 
+        width:50%;
+      }
+
+      .btn_rank{
+        height: 30%;
+        width: 90%;
+        font-size: 100%;
+        font-weight: bold;
+        margin: 5px;
+        padding: 5px;
+        border: 1px;
+        background-color:lightblue ;
+      }
+
+      h3{
+        text-align: left;
+        padding-left: 30px;
+      }
+
+      img{
+        padding-top: 15px;
+      }
+
+      #recipe{
+          text-align: left;
+          padding: 10px;
         }
 
     </style>
@@ -271,40 +242,30 @@
       </div>
   </div>
 
-  <div class="show-graph" style="float: left; width: 35%;">
-    <div><h3>재료 동향</h3></div>  
-    <div>
-      <div>
-        <div><h4>재료별 레시피 수</h4></div>
-        {% load static %}
-        <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드" width="100%">
+  <div class="show-graph" style="float: left; width: 40%;">
+    <h1>재료 동향</h1> 
+      <h3>&#11088; 레시피에 가장 많이 활용되는 재료</h3>
+      {% load static %}
+      <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드" width="90%">
+
+      <h3>&#11088; 이번 주 가격 상승/하락 TOP 3</h3>
+      <div class="rank">
+        <h4>&#x1F53A; 가격 상승 재료 TOP 3</h4>
+        <div><button class="btn_rank" value={{ index_up1 }}>1위 {{ index_up1 }}</button></div>
+        <div><button class="btn_rank" value={{ index_up2 }}>2위 {{ index_up2 }}</button></div>
+        <div><button class="btn_rank" value={{ index_up3 }}>3위 {{ index_up3 }}</button></div>
       </div>
 
-      <div>
-        <div><h4>이번주 재료 가격</h4></div>
-
-        <div>
-          <div class="rank">
-            <p>가격 상승 재료 TOP3</p>
-            <div><button class="btn_rank" value={{ index_up1 }}>1위 {{ index_up1 }}</button></div>
-            <div><button class="btn_rank" value={{ index_up2 }}>2위 {{ index_up2 }}</button></div>
-            <div><button class="btn_rank" value={{ index_up3 }}>3위 {{ index_up3 }}</button></div>
-          </div>
-          <div class="rank">
-            <p>가격 하락 재료 TOP3</p>
-            <div><button class="btn_rank" value={{ index_down1 }}>1위 {{ index_down1 }}</button></div>
-            <div><button class="btn_rank" value={{ index_down2 }}>2위 {{ index_down2 }}</button></div>
-            <div><button class="btn_rank" value={{ index_down3 }}>3위 {{ index_down3 }}</button></div>
-          </div>
-        </div>
-        <div id="chart">
-          <canvas id="line-chart"></canvas>
-        </div>
-
+      <div class="rank">
+        <h4>&#128315; 가격 하락 재료 TOP 3</h4>
+        <div><button class="btn_rank" value={{ index_down1 }}>1위 {{ index_down1 }}</button></div>
+        <div><button class="btn_rank" value={{ index_down2 }}>2위 {{ index_down2 }}</button></div>
+        <div><button class="btn_rank" value={{ index_down3 }}>3위 {{ index_down3 }}</button></div>
       </div>
-
-    </div>
-
+        
+      <div id="chart">
+        <canvas id="line-chart"></canvas>
+      </div>
   </div>
 
 
