@@ -10,8 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       $(function(){
@@ -179,15 +177,27 @@
         margin: 5px;
         padding: 5px;
         border: 1px;
-        background-color:lightblue ;
+        background-color: rgba(31, 152, 139) ;
+        color: white;
+      }
+      .btn_rank:active,
+      .btn_rank:hover,
+      .btn_rank:focus {
+        background-color: rgba(37, 62, 59) ;
+        outline: 0;
+        color: white;
       }
 
+
+      h1{
+        text-align: center;
+      }
       h3{
         text-align: left;
         padding-left: 30px;
       }
 
-      img{
+      #img{
         padding-top: 15px;
       }
 
@@ -203,7 +213,7 @@
   <h1>RECIPE</h1>
   <div id="recipe-table" style="float: left; width:60%;">
       <div id="header">
-      <h1>카테고리</h1>
+      <h2>카테고리</h2>
       </div>
       <div>
           <div id="cg">
@@ -243,11 +253,13 @@
   </div>
 
   <div class="show-graph" style="float: left; width: 40%;">
-    <h1>재료 동향</h1> 
+    <!-- <h2>재료 동향</h2>  -->
       <h3>&#11088; 레시피에 가장 많이 활용되는 재료</h3>
       {% load static %}
-      <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드" width="90%">
-
+      <div id="img">
+        <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드">
+      </div>
+      
       <h3>&#11088; 이번 주 가격 상승/하락 TOP 3</h3>
       <div class="rank">
         <h4>&#x1F53A; 가격 상승 재료 TOP 3</h4>
