@@ -189,11 +189,11 @@ def get_kamis_data():
         else:
             direction = 0
 
-        value = 0 # 등락률
-        if(direction == 0):
-            value = round(cost2/cost10, 2)
-        elif(direction == 1):
-            value = round(cost10/cost2, 2)
+        value = 0  # 가격차이
+        if (direction == 0):
+            value = cost10 - cost2
+        elif (direction == 1):
+            value = cost2 - cost10
         else:
             value = 0
 
@@ -214,6 +214,7 @@ def get_kamis_data():
                      })
 
     ingredient_prices = pd.DataFrame(rows)
+    return ingredient_prices
 
 
     # ingredient_prices = ingredient_prices.fillna(0)
@@ -232,8 +233,8 @@ if __name__ == '__main__':
     # print(df_api.head(10))
     #df_crawling = ingredient_price_crawling()
     #print(df_crawling)
+    df_kamis = get_kamis_data()
 
     # df_api.to_csv('ingredient_price_1.csv', index=False, encoding='utf-8-sig')
     # df_crawling.to_csv('ingredient_price_2.csv', index=False, encoding='utf-8-sig')
-
-    get_kamis_data()
+    df_kamis.to_csv('data_for_graph.csv', index=False, encoding='utf-8-sig')
