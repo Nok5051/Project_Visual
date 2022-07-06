@@ -4,8 +4,6 @@ import pandas as pd
 import urllib.request
 from bs4 import BeautifulSoup
 import config
-import datetime
-from datetime import timedelta
 import plotly.express as px
 
 def ingredient_price_api():
@@ -216,16 +214,16 @@ def get_kamis_data():
                      })
 
     ingredient_prices = pd.DataFrame(rows)
+
+
     # ingredient_prices = ingredient_prices.fillna(0)
     # ingredient_prices = ingredient_prices.astype({'부류코드':'category', '부류명':'category','품목코드':'category', '품목명':'category'})
-
     # print(ingredient_prices['품목명'].values.categories)
 
     # visualization : 당일, 등락, 등락률 표시하고 / 1일전, 10일전, 20일전, 1개월전, 1년전 line graph
-    df_graph = ingredient_prices.iloc[0]
-    # print(df_graph) # 날짜 가격
-    fig = px.line(df_graph, x=['1년전', '1개월전', '20일전', '10일전', '1일전', '당일'], y=[df_graph[10], df_graph[9], df_graph[8], df_graph[7], df_graph[6], df_graph[5]], title="Price")
-    fig.show()
+    # df_graph = ingredient_prices.iloc[0]
+    # fig = px.line(df_graph, x=['1년전', '1개월전', '20일전', '10일전', '1일전', '당일'], y=[df_graph[10], df_graph[9], df_graph[8], df_graph[7], df_graph[6], df_graph[5]], title="Price")
+    # fig.show()
 
 
 

@@ -5,6 +5,74 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+<<<<<<< HEAD
+    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        div{
+            text-align : center;
+        }
+        #show-graph{
+          margin-left: 10px;
+        }
+        #body{
+          background-color : white;
+          margin: 10px;
+        }
+
+        button{
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          height: 50px;
+          width: 15%;
+          font-size: 100%;
+          font-weight: bold;
+          margin: 0px;
+          padding: 0px;
+          border: 1px;
+          background-color:lightblue ;
+
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          cursor: pointer;
+          transition: 0.5s;
+        }
+
+        button:active,
+        button:hover,
+        button:focus {
+          background-color:steelblue ;
+          outline: 0;
+          color: white;
+        }
+
+        table, td, th{
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+
+        .rank{
+          float: left; 
+          width:50%;
+        }
+
+        .btn_rank{
+          height: 30%;
+          width: 90%;
+          font-size: 100%;
+          font-weight: bold;
+          margin: 10px;
+          padding: 0px;
+          border: 1px;
+          background-color:lightblue ;
+        }
+
+    </style>
+
+=======
+>>>>>>> fce4429d0f5f02fd7dee467ba34bdd5f8aa57723
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       $(function(){
@@ -31,6 +99,13 @@
           var category = $(this).val();
           getMenu(category);
         });
+<!--    등락순위 재료버튼 누르면 그래프 그려짐-->
+        $(".btn_rank").click(function(){
+            var ingredient = $(this).val();
+            console.log(ingredient);
+            getGraph(ingredient);
+        });
+
       })
 
       function getMenu(category){
@@ -55,14 +130,53 @@
               $("#"+i).append($("<td>").html(addComma(values[i]['total_price'])));
               $("#"+i).append($("<td>").html(values[i]['unit_price']));
               }
-
-            
           }, error: function(){
             alert('메뉴 통신 오류')
           }
 
         });
       }
+<<<<<<< HEAD
+      function getGraph(ingredient){
+        $.ajax({
+            url: 'getGraph/',
+            data: {'ingredient': ingredient},
+            dataType: 'json',
+            success:function(data){
+                $("#chart").empty();
+                $("#chart").append('<canvas id="line-chart"></canvas>');
+                console.log(data);
+                // 필요한 데이터를 리스트에 넣는다.
+                var data_list = data.value;
+                let CostChart = new Chart(
+                  document.getElementById('line-chart'), {
+                  type: 'line',
+                  data: {
+                    labels: ['1년전', '1개월전', '20일전', '10일전', '1일전', '당일'],
+                    datasets: [{
+                      data: data_list,
+                      label: ingredient,
+                      borderColor: "#3e95cd",
+                      fill: false
+                    }]
+                  },
+                  options: {
+                    title: {
+                      display: true,
+                      text: '가격 변동'
+                    }
+                  }
+                }); // 그래프
+            },
+            error:function(){
+                alert("실패")
+            }
+        }); // ajax
+      } // getGraph
+    </script>
+
+
+=======
 
       //천단위 콤마 펑션
       function addComma(value){
@@ -119,6 +233,7 @@
         }
 
     </style>
+>>>>>>> fce4429d0f5f02fd7dee467ba34bdd5f8aa57723
 </head>
 <body>
   
@@ -164,14 +279,41 @@
       </div>
   </div>
 
-  <div id="show-graph" style="float: left; width: 35%;">
-    <p>graphs here</p>
-<!--  mealproject app/static 폴더에 넣어야 함 (settings.py STATIC_URL 참고)  -->
-    {% load static %}
-    <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드" width="100%">
+  <div class="show-graph" style="float: left; width: 35%;">
+    <div><h3>재료 동향</h3></div>  
+    <div>
+      <div>
+        <div><h4>재료별 레시피 수</h4></div>
+        {% load static %}
+        <img src="{% static 'recipe_cloud.png' %}" alt="레시피 클라우드" width="100%">
+      </div>
+
+      <div>
+        <div><h4>이번주 재료 가격</h4></div>
+
+        <div>
+          <div class="rank">
+            <p>가격 상승 재료 TOP3</p>
+            <div><button class="btn_rank" value={{ index_up1 }}>1위 {{ index_up1 }}</button></div>
+            <div><button class="btn_rank" value={{ index_up2 }}>2위 {{ index_up2 }}</button></div>
+            <div><button class="btn_rank" value={{ index_up3 }}>3위 {{ index_up3 }}</button></div>
+          </div>
+          <div class="rank">
+            <p>가격 하락 재료 TOP3</p>
+            <div><button class="btn_rank" value={{ index_down1 }}>1위 {{ index_down1 }}</button></div>
+            <div><button class="btn_rank" value={{ index_down2 }}>2위 {{ index_down2 }}</button></div>
+            <div><button class="btn_rank" value={{ index_down3 }}>3위 {{ index_down3 }}</button></div>
+          </div>
+        </div>
+        <div id="chart">
+          <canvas id="line-chart"></canvas>
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
-
 
 
 
