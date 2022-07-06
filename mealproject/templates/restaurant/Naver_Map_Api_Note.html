@@ -1341,7 +1341,7 @@ var infoWindow = new naver.maps.InfoWindow({
   anchorSkew: true
 });
                                         // 검색할 주소 넣어주면 됨
-naver.maps.Service.geocode({ address: '경기도 용인시 기흥구 강남로 40' }, function(status, response) {
+naver.maps.Service.geocode({ address: '서울 종로구 필운대로6길 17-1' }, function(status, response) {
             if (status === naver.maps.Service.Status.ERROR) {
                 return alert('Something wrong!');
             }
@@ -1352,7 +1352,6 @@ naver.maps.Service.geocode({ address: '경기도 용인시 기흥구 강남로 4
 
 
 // 보유한 데이터 값을 통해 미리 다중 마커를 지도에 표기해두고 검색 주소로 이동시켜 해당 위치의 마커들을 표시해주는 코드를 만들 예정
-
 
 </script>
 </body>

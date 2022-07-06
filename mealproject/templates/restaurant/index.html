@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ei<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,12 +10,18 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
+<script type="text/javascript">
       $(function(){
         $("#gu").change(function(){
           var gu = $(this).val();
           getdong(gu);
         });
+
+        $("#submitButton").click(function(e){
+          e.preventDefault();
+          $("#dataForm").submit();
+        })
+
         });
         
         function getdong(gu){
@@ -35,15 +41,17 @@
 
           });
         }
-        
+
+
 
 </script>
 
 <body>
 
-<form action="" method="POST">
+<form action="{% url 'mappage' %}" method="POST" id="dataForm">
+    {% csrf_token %}
     <div class="wrapper">
-        <h2>지역을 선택해 주세요.</h1>
+        <h2>지역을 선택해 주세요.</h2>
             <select id="gu" name="gu">
                 <option value="all">구</option>
                 <option value="동대문구">동대문구</option>
@@ -106,7 +114,8 @@
         </select>
         
         <p>
-        <input type="submit" value="확인">
+<!--            <button type="button" onclick="location.href='{% url 'mappage' %}'">확인</button>-->
+            <input type="button" value="확인" id="submitButton"/>
         </p>
     </div>
 </form>
