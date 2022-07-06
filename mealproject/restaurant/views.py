@@ -1,6 +1,7 @@
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+import pymysql
 
 from .models import MapStore
 
@@ -43,23 +44,27 @@ def getdong(request):
                 value.extend(dong_lst[i])
 
     return JsonResponse(dong_dict)
-'''
+
+
 def insert_data(request):
-	if request.method == 'GET':
-        
-        gu = request.GET('gu')
-        dong = request.GET('dong')
-        menutype = request.GET('menutype')
-        pricetype = request.GET('pricetype')
+    context = dict()
+    if request.method == 'POST':
+        gu = request.POST.getlist('gu', '')
 
+        gu1 = request.POST['gu']
+        dong1 = request.POST['dong']
+        menutype = request.POST['menutype']
+        pricetype = request.POST['pricetype']
 
+        result = MapStore.objects.filter(
+            addr = gu1+' '+dong1,
+            storetype = menutype,
+            menu1_price = pricetype
+        )
 
-    context = {
-        'gu':gu,
-        'dong':dong,
-        'menutype':menutype,
-        'pricetype':pricetype
+        context = {
+            'data_lst': {'gu': ''.join(gu[0])},
+            'result' : result
         }
 
-    return redirect('restaurant/map.html', context)
-'''
+    return render(request, 'restaurant/map.html', context)
