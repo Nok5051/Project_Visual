@@ -37,7 +37,7 @@ rd = csv.reader(f)
 # 카테고리 테이블 생성
 sql = '''
 
-CREATE TABLE Category_test(
+CREATE TABLE Category(
     ID INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     CATEGORY VARCHAR(10) NOT NULL
 );
@@ -45,9 +45,32 @@ CREATE TABLE Category_test(
 # curs.execute(sql)
 
 insert_sql = '''
-insert into Category_test(CATEGORY) select distinct CATEGORY from Recipe where "CATEGORY" not in (select CATEGORY from Category_test);
+insert into Category(CATEGORY) select distinct CATEGORY from Recipe where "CATEGORY" not in (select CATEGORY from Category);
 '''
 # curs.execute(insert_sql)
+
+# 가격 테이블 생성
+create_sql = '''
+CREATE TABLE ingredient_price(
+    ID INT(200) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    INGREDIENT_NM VARCHAR(20) NOT NULL,
+    UNIT VARCHAR(10) NOT NULL,
+    PRICE VARCHAR(20) NOT NULL
+)
+'''
+# curs.execute(create_sql)
+
+# 데이터 삽입
+insert_sql = '''
+INSERT INTO ingredient_price(INGREDIENT_NM, UNIT, PRICE) values (%s, %s, %s)
+'''
+
+f = open('./recipe_data/standard_price.csv', 'r', encoding='utf-8-sig')
+rd = csv.reader(f)
+
+# for line in rd:
+#     curs.execute(insert_sql, (line[0], line[1], line[2]))
+
 
 conn.commit()
 conn.close()

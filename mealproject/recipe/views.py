@@ -51,7 +51,7 @@ def getMenu(request):
 @api_view(["GET"])
 def getGraph(request):
     ingredient = request.GET['ingredient']
-    ingredient_price = pd.read_csv('C:/workspaces/workspace_project/Project_Visual/recipe_data/data_for_graph.csv')
+    ingredient_price = pd.read_csv('./recipe_data/data_for_graph.csv')
     df_graph = ingredient_price[ingredient_price['품목명'] == ingredient]
     data = json.dumps({'value' : [int(df_graph.iloc[0,10]), int(df_graph.iloc[0,9]), int(df_graph.iloc[0,8]), int(df_graph.iloc[0,7]), int(df_graph.iloc[0,6]), int(df_graph.iloc[0,5])]})
 
