@@ -5,40 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
-</head>
-<style></style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <style>
+      *{
+        font-family: 'Nanum Gothic', sans-serif;
+      }
+    </style>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-      $(function(){
-        $("#gu").change(function(){
-          var gu = $(this).val();
-          getdong(gu);
-        });
-        });
-        
-        function getdong(gu){
-          $.ajax({
-          url: 'getdong/',
-          data: {'gu': gu},
-          dataType: 'json',
-          success: function(msg){
-            var values = Object.values(msg[gu])
-            for (var i = 0; i < values.length; i++){
-              $("#dong").append($("<option value="+values[i]+">"+values[i]+"</option>"));
-              }
-          },
-          error: function(){
-            alert('구군 통신 실패');
-          }
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function(){
+          $("#gu").change(function(){
+            var gu = $(this).val();
+            getdong(gu);
           });
-        }
-        
+          });
+          
+          function getdong(gu){
+            $.ajax({
+            url: 'getdong/',
+            data: {'gu': gu},
+            dataType: 'json',
+            success: function(msg){
+              var values = Object.values(msg[gu])
+              for (var i = 0; i < values.length; i++){
+                $("#dong").append($("<option value="+values[i]+">"+values[i]+"</option>"));
+                }
+            },
+            error: function(){
+              alert('구군 통신 실패');
+            }
 
-</script>
-
+            });
+          }
+    </script>
+</head>
 <body>
 
 <form action="" method="POST">
