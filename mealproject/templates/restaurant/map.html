@@ -95,74 +95,113 @@
 </body>
 
 <script>
+
 $(function(){
-
-
     
     var map = new naver.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: new naver.maps.LatLng(37.5666103, 126.9783882)  // 서울시 좌표값
     });
 
-var infoWindow = new naver.maps.InfoWindow({
-  anchorSkew: true
-});
+    var infoWindow = new naver.maps.InfoWindow({
+    anchorSkew: true
+    });
 
-                                       // 검색할 주소 넣어주면 됨
-naver.maps.Service.geocode({ address: "{{ data_lst.gu }}" }, function(status, response) {
-            if (status === naver.maps.Service.Status.ERROR) {
+                                        // 검색할 주소 넣어주면 됨
+    naver.maps.Service.geocode({ address: "{{ data_lst.gu }}" }, function(status, response) {
+                if (status === naver.maps.Service.Status.ERROR) {
+                    return alert('Something wrong!');
+                };
+                var new_position = new naver.maps.LatLng(response.v2.addresses[0].y, response.v2.addresses[0].x)
+                map.setCenter(new_position);   // 요구하는 검색 주소로 이동하면 그 주변 지도 값 표현
+
+            });
+
+    // 반복문으로 다중 마커부여
+
+
+    var temp1=document.getElementsByName("newstoreadd");
+    var markerList = [];
+
+
+    for(var i = 0; i < temp1.length; i++){
+        markerList.push(temp1[i].innerText);
+
+    }
+
+    var temp2=document.getElementsByName("storename");
+    var nameList = [];
+
+    for(var i = 0; i < temp2.length; i++){
+        nameList.push(temp2[i].innerText);
+    }
+
+
+    var markers = [],
+        infoWindows = [];
+
+
+
+    for (var i=0, ii=markerList.length; i<ii; i++) {
+        naver.maps.Service.geocode({
+            query: markerList[i]
+        }, function(status, response) {
+            if (status !== naver.maps.Service.Status.OK) {
                 return alert('Something wrong!');
             };
-            var new_position = new naver.maps.LatLng(response.v2.addresses[0].y, response.v2.addresses[0].x)
-            map.setCenter(new_position);   // 요구하는 검색 주소로 이동하면 그 주변 지도 값 표현
 
+            var result = response.v2, // 검색 결과의 컨테이너
+                items = result.addresses; // 검색 결과의 배열
+
+            // 리턴 받은 좌표 값을 변수에 저장
+            let x = parseFloat(items[0].x);
+            let y = parseFloat(items[0].y);
+
+            // 지도에 해당 좌표 마커(아이콘 설정)
+            var markerOptions = {
+                    position: new naver.maps.LatLng(y, x), //마커찍을 좌표
+                    map: map,
+                        icon: {
+                            url: 'resources/img/marker.png',
+                            size: new naver.maps.Size(22, 36), //아이콘 크기
+                            origin: new naver.maps.Point(0, 0),
+                        anchor: new naver.maps.Point(11, 35)
+
+                    }
+                    };
+                // 마커 생성
+            var marker = new naver.maps.Marker(markerOptions);
+            
+            markers.push(marker)
+
+        
         });
+    
+    };
 
-// 반복문으로 다중 마커부여
+    for (var key in nameList) {
+        var infoWindow = new naver.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:10px;"> <b>"' + nameList[key] +'"</b>.</div>',
+        });
+        infoWindows.push(infoWindow);
+        
 
+        };
 
-var temp=document.getElementsByName("newstoreadd");
-var markerList = [];
+    //여기 for 문부터 실패 지점 정보창 자체가 안뜸 
+    for (var i=0, ii=markers.length; i<ii; i++){
+        naver.maps.Event.addListener(markers[i], "click", function() {
+            if (infoWindows[i].getMap()) {
+                infoWindows[i].close();
+            } else {
+                infoWindows[i].open(map, markers[i]);
+            }
+        });
+    }
 
-
-for(var i = 0; i < temp.length; i++){
-    markerList.push(temp[i].innerText);
-}
-
-for (var i=0, ii=markerList.length; i<ii; i++) {
-    naver.maps.Service.geocode({
-           query: markerList[i]
-       }, function(status, response) {
-           if (status !== naver.maps.Service.Status.OK) {
-               return alert('Something wrong!');
-           };
-
-           var result = response.v2, // 검색 결과의 컨테이너
-               items = result.addresses; // 검색 결과의 배열
-
-           // 리턴 받은 좌표 값을 변수에 저장
-           let x = parseFloat(items[0].x);
-           let y = parseFloat(items[0].y);
-
-           // 지도에 해당 좌표 마커(아이콘 설정)
-           var markerOptions = {
-                  position: new naver.maps.LatLng(y, x), //마커찍을 좌표
-                  map: map,
-                    icon: {
-                        url: 'resources/img/marker.png',
-                        size: new naver.maps.Size(22, 36), //아이콘 크기
-                        origin: new naver.maps.Point(0, 0),
-                      anchor: new naver.maps.Point(11, 35)
-
-                  }
-                };
-            // 마커 생성
-           var marker = new naver.maps.Marker(markerOptions);
-       });
-
-};
+    console.log(infoWindows) 
+    console.log(markers)
 })
-
 
 </script>
 </html>
