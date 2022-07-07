@@ -62,9 +62,11 @@ def insert_data(request):
             menu1_price = pricetype
         )
 
+       
         context = {
             'data_lst': {'gu': ''.join(gu[0])},
-            'result' : result
+            'result' : result,
+       
         }
 
     return render(request, 'restaurant/map.html', context)

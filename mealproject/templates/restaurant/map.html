@@ -62,13 +62,13 @@
     <div class="left">
         {% for i in result %}
         <h4>
-            <span class="name">식당명</span><span>{{ i.storename }}</span>
+            <span class="name">식당명</span><span name="storename">{{ i.storename }}</span>
         </h4>
         <p>
             <span class="name">카테고리</span><span> {{ i.storetype }}</span>
         </p>
         <p>
-            <span class="name">주소</span><span> {{ i.newstoreadd }}</span>
+            <span class="name">주소</span><span name="newstoreadd"> {{ i.newstoreadd }}</span>
         </p>
         <p>
             <span class="name">가격대</span><span> {{ i.menu1_price }}</span>
@@ -78,6 +78,9 @@
         </p>
         <hr>
         {% endfor %}
+
+
+
     </div>
 
     <div class="right" id="map">
@@ -96,7 +99,7 @@ $(function(){
 
     
     var map = new naver.maps.Map(document.getElementById('map'), {
-    zoom: 16,
+    zoom: 12,
     center: new naver.maps.LatLng(37.5666103, 126.9783882)  // 서울시 좌표값
     });
 
@@ -116,11 +119,15 @@ naver.maps.Service.geocode({ address: "{{ data_lst.gu }}" }, function(status, re
 
 // 반복문으로 다중 마커부여
 
-var markerList = ['서울 종로구 인왕산로 3', '서울 종로구 자하문로7길 36', '서울 종로구 율곡로 230-27', '서울 양천구 남부순환로79길 37', '서울 종로구 자하문로1길 45'];
+var temp=document.getElementsByName("newstoreadd");
+var markerList = [];
+
+for(var i = 0; i < temp.length; i++){
+    markerList.push(temp[i].innerText);
+}
 
 for (var i=0, ii=markerList.length; i<ii; i++) {
-
-  naver.maps.Service.geocode({
+    naver.maps.Service.geocode({
            query: markerList[i]
        }, function(status, response) {
            if (status !== naver.maps.Service.Status.OK) {
