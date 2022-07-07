@@ -57,6 +57,7 @@
         margin: 10px;
     }
 </style>
+
 <body>
     <h1>식당 리스트</h1>
     <div class="left">
@@ -119,8 +120,10 @@ naver.maps.Service.geocode({ address: "{{ data_lst.gu }}" }, function(status, re
 
 // 반복문으로 다중 마커부여
 
+
 var temp=document.getElementsByName("newstoreadd");
 var markerList = [];
+
 
 for(var i = 0; i < temp.length; i++){
     markerList.push(temp[i].innerText);
