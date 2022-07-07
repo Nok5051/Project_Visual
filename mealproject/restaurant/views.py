@@ -45,39 +45,26 @@ def getdong(request):
 
     return JsonResponse(dong_dict)
 
+
 def insert_data(request):
-    data_lst = []
     context = dict()
     if request.method == 'POST':
-        
-        gu = request.POST.getlist('gu', ''),
-        dong = request.POST.getlist('dong', ''),
-        menutype = request.POST.getlist('menutype', ''),
-        pricetype = request.POST.getlist('pricetype', '')
+        gu = request.POST.getlist('gu', '')
 
-        # data_lst.extend({'gu': gu[0]})
-        # data_lst.extend({'dong': dong[0]})
-        # data_lst.extend({'menutype': menutype[0]})
-        # data_lst.extend({'pricetye': pricetype})
+        gu1 = request.POST['gu']
+        dong1 = request.POST['dong']
+        menutype = request.POST['menutype']
+        pricetype = request.POST['pricetype']
+
+        result = MapStore.objects.filter(
+            addr = gu1+' '+dong1,
+            storetype = menutype,
+            menu1_price = pricetype
+        )
 
         context = {
-            'data_lst': {'gu': ''.join(gu[0])}
+            'data_lst': {'gu': ''.join(gu[0])},
+            'result' : result
         }
-
-        print(type(gu[0]), '----------------------')
-
-        print(context)
-
-    return render(request, 'restaurant/map.html', context)
-
-def newstadd(request):
-
-    newadd_lst = []
-    st_addr = MapStore.objects.values_list('newstoreadd', flat=True)
-    newadd_lst.append(st_addr)
-
-    context = {
-        'newadd_lst': newadd_lst
-    }
 
     return render(request, 'restaurant/map.html', context)

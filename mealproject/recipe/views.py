@@ -9,10 +9,23 @@ from rest_framework.response import Response
 from .serializers import *
 
 
+import pandas as pd
+from django.http import HttpResponse
+import json
+
 
 # Create your views here.
 def index(request):
-    content = {'list': Recipe.objects.all(), 'catogories': Category.objects.all()}
+    ingredient_price = pd.read_csv('../recipe_data/data_for_graph.csv')
+    df_down = ingredient_price[ingredient_price['등락'] == 0].sort_values(by='등락률', ascending=False)
+    df_up = ingredient_price[ingredient_price['등락'] == 1].sort_values(by='등락률', ascending=False)
+    index_down1 = df_down.iloc[0, 3]
+    index_down2 = df_down.iloc[1, 3]
+    index_down3 = df_down.iloc[2, 3]
+    index_up1 = df_up.iloc[0, 3]
+    index_up2 = df_up.iloc[1, 3]
+    index_up3 = df_up.iloc[2, 3]
+    content = {'list': Recipe.objects.all(), 'catogories': Category.objects.all(),'index_down1':index_down1, 'index_down2':index_down2, 'index_down3':index_down3, 'index_up1':index_up1, 'index_up2':index_up2, 'index_up3':index_up3}
     return render(request, 'recipe/index.html',  content)
 
 @api_view(["GET"])
@@ -28,4 +41,12 @@ def getMenu(request):
     serialized_recipes = RecipeSerializer(recipes, many=True)
     return Response(data=serialized_recipes.data)
 
+@api_view(["GET"])
+def getGraph(request):
+    ingredient = request.GET['ingredient']
+    ingredient_price = pd.read_csv('../recipe_data/data_for_graph.csv')
+    df_graph = ingredient_price[ingredient_price['품목명'] == ingredient]
+    data = json.dumps({'value' : [int(df_graph.iloc[0,10]), int(df_graph.iloc[0,9]), int(df_graph.iloc[0,8]), int(df_graph.iloc[0,7]), int(df_graph.iloc[0,6]), int(df_graph.iloc[0,5])]})
+
+    return HttpResponse(data, content_type="application/json")
 

@@ -7,41 +7,85 @@
     <title>Document</title>
 
     <script type="text/javascript"
-	src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=h0hatymncv&submodules=geocoder">
+   src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=h0hatymncv&submodules=geocoder">
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
 
-<style>       
-    div.left {
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .left {
         width: 50%;
         float:  left;
         box-sizing: border-box;
-
+        padding-left: 10px;
+        margin-top: 40px;
     }
-    div.right{
+    
+    .right{
         width: 50%;
         float: right;
         box-sizing: border-box;
+        height: 600px;
+        margin-top: 50px;
+    }
+
+    .name{
+        display: inline-block;
+        width: 80px;
+    }
+
+    .menu{
+        display: inline-block;
+        width: 40%;
+    }
+    h1{
+        text-align: center;
+        margin-top: 45px;
+    }
+    h4{
+        margin-left: 10px;
+        margin-top: 20px;
+    }
+    p{
+        margin: 10px;
     }
 </style>
 
 <body>
-{{ data_lst }}
-    <div>
-        
-        <div class="left">
-        <ul>식당리스트</ul>
-        </div>
-
-            <h1>지도 넣을 거임</h1>
-        <div class="right" id="map" style="width:60%;height:600px;">
-
-        </div>
-
+    <h1>식당 리스트</h1>
+    <div class="left">
+        {% for i in result %}
+        <h4>
+            <span class="name">식당명</span><span>{{ i.storename }}</span>
+        </h4>
+        <p>
+            <span class="name">카테고리</span><span> {{ i.storetype }}</span>
+        </p>
+        <p>
+            <span class="addr">주소</span><span> {{ i.newstoreadd }}</span>
+        </p>
+        <p>
+            <span class="name">가격대</span><span> {{ i.menu1_price }}</span>
+        </p>
+        <p>
+            <span class="name">메뉴</span><span class="menu">{{ i.menu1 }}</span><span>|&nbsp;&nbsp;&nbsp; {{ i.menu2 }}</span>
+        </p>
+        <hr>
+        {% endfor %}
     </div>
+
+    <div class="right" id="map">
+        <h1>지도</h1>
+    </div>
+
+
 
 
 
@@ -62,7 +106,7 @@ var infoWindow = new naver.maps.InfoWindow({
 });
 
                                        // 검색할 주소 넣어주면 됨
-naver.maps.Service.geocode({ address: "{{data_lst.gu}}" }, function(status, response) {
+naver.maps.Service.geocode({ address: "{{ data_lst.gu }}" }, function(status, response) {
             if (status === naver.maps.Service.Status.ERROR) {
                 return alert('Something wrong!');
             };
@@ -73,39 +117,40 @@ naver.maps.Service.geocode({ address: "{{data_lst.gu}}" }, function(status, resp
 
 // 반복문으로 다중 마커부여
 
-var markerList = {{newadd_lst}};
+
+var markerList = ['서울 광진구 면목로 166', '서울 광진구 능동로 345', '서울 종로구 율곡로 230-27', '서울 양천구 남부순환로79길 37', '서울 종로구 자하문로1길 45'];
 
 for (var i=0, ii=markerList.length; i<ii; i++) {
 
   naver.maps.Service.geocode({
-	        query: markerList[i]
-	    }, function(status, response) {
-	        if (status !== naver.maps.Service.Status.OK) {
-	            return alert('Something wrong!');
-	        };
+           query: markerList[i]
+       }, function(status, response) {
+           if (status !== naver.maps.Service.Status.OK) {
+               return alert('Something wrong!');
+           };
 
-	        var result = response.v2, // 검색 결과의 컨테이너
-	            items = result.addresses; // 검색 결과의 배열
+           var result = response.v2, // 검색 결과의 컨테이너
+               items = result.addresses; // 검색 결과의 배열
 
-	        // 리턴 받은 좌표 값을 변수에 저장
-	        let x = parseFloat(items[0].x);
-	        let y = parseFloat(items[0].y);
+           // 리턴 받은 좌표 값을 변수에 저장
+           let x = parseFloat(items[0].x);
+           let y = parseFloat(items[0].y);
 
-	        // 지도에 해당 좌표 마커(아이콘 설정)
-	        var markerOptions = {
-	        	    position: new naver.maps.LatLng(y, x), //마커찍을 좌표
-	        	    map: map,
+           // 지도에 해당 좌표 마커(아이콘 설정)
+           var markerOptions = {
+                  position: new naver.maps.LatLng(y, x), //마커찍을 좌표
+                  map: map,
                     icon: {
                         url: 'resources/img/marker.png',
                         size: new naver.maps.Size(22, 36), //아이콘 크기
                         origin: new naver.maps.Point(0, 0),
-	        	        anchor: new naver.maps.Point(11, 35)
+                      anchor: new naver.maps.Point(11, 35)
 
-	        	    }
+                  }
                 };
             // 마커 생성
-	        var marker = new naver.maps.Marker(markerOptions);
-	    });
+           var marker = new naver.maps.Marker(markerOptions);
+       });
 
 };
 })

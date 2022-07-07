@@ -1,9 +1,11 @@
-from recipe_data import df_preprocessing
+from recipe_data import recipe_preprocess
 import csv
+import re
+
+df_rc = recipe_preprocess()
 
 # 표준단위 변환 작업 시작
-df_preprocessing()
-# 재료별 수량이 어떻게 적혀있는지 확인
+# 1. 재료별 수량이 어떻게 적혀있는지 확인 - 표준단위 세팅
 unit_key = []
 for i in df_rc["INGREDIENTS"]:
     unit_key.append(i)  # [['파스타면', '물', '올리브유'], ['라면', '대파', '계란']]
@@ -45,15 +47,13 @@ for i in range(len(unit_dict_key)):
         pass
 
 
-
-# 실제 재료별 용량 딕셔너리
+# 2. 재료별 실제 용량 단위 딕셔너리
 real_dict = dict()
 
 for i in range(len(unit_key)): # 메뉴 숫자만큼
     for j in range(len(unit_key[i])): # 재료 숫자만큼
         if unit_key[i][j] in real_dict:
             try:
-                # 단위 확인 : 특수문자, 숫자 삭제
                 strval = unit_value[i][j]
                 real_dict[unit_key[i][j]].append(strval)
             except:
@@ -62,7 +62,7 @@ for i in range(len(unit_key)): # 메뉴 숫자만큼
             strval = unit_value[i][j]
             real_dict[unit_key[i][j]] = [strval]
 
-# 변환 규칙 리스트
+# 3. 단위 변환 규칙 리스트
 t = ["티스푼", "작은술", "꼬집", "작은T", "직은술", "ts", "tbsp"]
 T = ["큰T", "숟가락", "큰술", "Ts", "큰 술", "스픈", "스푼", "수저"]
 serving = ["인분분량", "인분(500원크기)", "500원 동전보다 살짝 크게 움켜쥔 정도(", "공기"]
@@ -86,7 +86,7 @@ ttoT = ["t"]
 
 
 
-# 단위 변환
+# 4. 단위 변환
 for i in range(len(unit_key)): # 메뉴 숫자만큼
     for j in range(len(unit_key[i])): # 재료 숫자만큼
         for n in range(len(real_dict[unit_key[i][j]])):
@@ -132,7 +132,6 @@ for i in range(len(unit_key)): # 메뉴 숫자만큼
             for keyword in gun:
                 if keyword in real_dict[unit_key[i][j]][n]:
                     real_dict[unit_key[i][j]][n] = real_dict[unit_key[i][j]][n].replace(keyword, "*600g")
-
 
             for keyword in cupml:
                 if keyword in real_dict[unit_key[i][j]][n]:

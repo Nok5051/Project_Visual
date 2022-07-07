@@ -24,4 +24,3 @@ class MapStore(models.Model):
     class Meta:
         managed = False
         db_table = 'Map_store'
-
